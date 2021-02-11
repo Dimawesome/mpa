@@ -5,9 +5,9 @@ use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
 /**
- * Class CreatePagesTable
+ * Class CreateMenuItemsTable
  */
-class CreatePagesTable extends Migration
+class CreateMenuItemsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -17,20 +17,20 @@ class CreatePagesTable extends Migration
     public function up(): void
     {
         Schema::disableForeignKeyConstraints();
-        Schema::dropIfExists('pages');
+        Schema::dropIfExists('menu_items');
         Schema::enableForeignKeyConstraints();
-        
-        Schema::create('pages', function (Blueprint $table) {
+
+        Schema::create('menu_items', function (Blueprint $table) {
             $table->id();
             $table->uuid('uid');
             $table->foreignId('creator_id')->nullable()->constrained('users');
+            $table->string('type');
+            $table->string('name');
+            $table->text('url')->nullable();
+            $table->integer('order')->unsigned();
+            $table->string('status')->default('inactive');
+            $table->string('target')->nullable();
             $table->string('language')->nullable();
-            $table->string('title')->nullable();
-            $table->text('visible_to')->nullable();
-            $table->string('status')->nullable()->default('inactive');
-            $table->boolean('is_default')->default(0);
-            $table->string('page_name')->default('page');
-            $table->string('is_deleted')->default(0);
 
             $table->timestamps();
         });
@@ -38,12 +38,11 @@ class CreatePagesTable extends Migration
 
     /**
      * Reverse the migrations.
-     *
-     *
+     *.
      * @return void
      */
     public function down(): void
     {
-        Schema::dropIfExists('pages');
+        Schema::dropIfExists('menu_items');
     }
 }
