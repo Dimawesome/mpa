@@ -10,7 +10,7 @@
     @include('partials._css')
 
 </head>
-<body>
+<body class="@yield('body_color')">
 
 @yield('body')
 

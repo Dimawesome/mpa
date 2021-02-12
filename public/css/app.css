@@ -1,1 +1,148 @@
+body {
+    margin: 0;
+    padding: 0;
+    background-color: #EAEAEA;
+    height: 100vh;
+}
 
+.border-top {
+    border-top: 1px solid #e5e5e5;
+}
+
+.border-bottom {
+    border-bottom: 1px solid #e5e5e5;
+}
+
+em.fa {
+    margin: 0 5px 0 0;
+}
+
+.bg-purple {
+    background-color: #53288c !important;
+}
+
+.text-purple {
+    color: #53288c !important;
+}
+
+.btn-purple {
+    color: #fff;
+    background-color: #53288c;
+    border-color: #53288c;
+}
+
+.btn-purple:hover {
+    color: #fff;
+    background-color: #49247e;
+    border-color: #49247e;
+}
+
+.btn-purple:focus {
+    color: #fff;
+    background-color: #49247e;
+    border-color: #49247e;
+    box-shadow: 0 0 0 0.2rem rgb(65 31 109 / 50%);
+}
+
+.btn-purple:not(:disabled):not(.disabled):active:focus {
+    background-color: #3c1d64;
+    border-color: #3c1d64;
+    box-shadow: 0 0 0 0.2rem rgb(65 31 109 / 50%);
+}
+
+#login .container #login-row #login-column #login-box {
+    margin-top: 120px;
+    max-width: 600px;
+    /*height: 320px;*/
+    height: auto;
+    border: 1px solid #9C9C9C;
+    background-color: #EAEAEA;
+}
+
+#login .container #login-row #login-column #login-box #login-form {
+    padding: 20px;
+}
+
+#login .container #login-row #login-column #login-box #login-form #register-link {
+    margin-top: -85px;
+}
+
+label.error {
+    margin: 3px 0 0 0;
+    color: #dc3545;
+}
+
+/*
+ * Navbar
+ */
+.navbar-brand {
+    padding-top: .75rem;
+    padding-bottom: .75rem;
+    font-size: 1rem;
+    background-color: rgba(0, 0, 0, .25);
+    box-shadow: inset -1px 0 0 rgba(0, 0, 0, .25);
+}
+
+.navbar .form-control {
+    padding: .75rem 1rem;
+    border-width: 0;
+    border-radius: 0;
+}
+
+.form-control-dark {
+    color: #fff;
+    background-color: rgba(255, 255, 255, .1);
+    border-color: rgba(255, 255, 255, .1);
+}
+
+.form-control-dark:focus {
+    border-color: transparent;
+    box-shadow: 0 0 0 3px rgba(255, 255, 255, .25);
+}
+
+/*
+ * Sidebar
+ */
+.admin-panel .sidebar {
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    z-index: 100; /* Behind the navbar */
+    padding: 0;
+    box-shadow: inset -1px 0 0 rgba(0, 0, 0, .1);
+}
+
+.admin-panel .sidebar-sticky {
+    position: -webkit-sticky;
+    position: sticky;
+    top: 48px; /* Height of navbar */
+    height: calc(100vh - 48px);
+    padding-top: .5rem;
+    overflow-x: hidden;
+    overflow-y: auto; /* Scrollable contents if viewport is shorter than content. */
+}
+
+.admin-panel .sidebar .nav-link {
+    font-weight: 500;
+    color: #333;
+}
+
+.admin-panel .sidebar .nav-link .feather {
+    margin-right: 4px;
+    color: #999;
+}
+
+.admin-panel .sidebar .nav-link.active {
+    color: #53288c;
+}
+
+.admin-panel .sidebar .nav-link:hover .feather,
+.admin-panel .sidebar .nav-link.active .feather {
+    color: inherit;
+}
+
+.admin-panel .sidebar-heading {
+    font-size: .75rem;
+    text-transform: uppercase;
+}

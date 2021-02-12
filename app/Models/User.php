@@ -47,4 +47,17 @@ class User extends Authenticatable
         'created_at',
         'updated_at'
     ];
+
+    /**
+     * User form rules
+     *
+     * @return array
+     */
+    public function rules():array
+    {
+        return [
+            'username' => 'required',
+            'password' => 'required'
+        ];
+    }
 }
