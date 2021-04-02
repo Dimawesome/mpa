@@ -41,7 +41,7 @@ class AdminController extends Controller
             return back()->withErrors(['username' => 'nope']);
         }
 
-        return view('admin.partials.login', ['rules' => $this->user->rules()]);
+        return view('admin.login', ['rules' => $this->user->rules()]);
     }
 
     /**

@@ -24,7 +24,6 @@ class CreateMenuItemsTable extends Migration
             $table->id();
             $table->uuid('uid');
             $table->foreignId('creator_id')->nullable()->constrained('users');
-            $table->string('type');
             $table->string('name');
             $table->text('url')->nullable();
             $table->integer('order')->unsigned();

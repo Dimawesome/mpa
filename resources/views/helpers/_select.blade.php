@@ -26,5 +26,5 @@
         >{{ htmlspecialchars($option['text']) }}</option>
     @endforeach
 </select>
-<span class="select-options display-none">{{ isset($pluginOptions) ? json_encode($pluginOptions) : '{}' }}</span>
-<span class="display-options display-none">{{ isset($displayOptions) ? json_encode($displayOptions) : '{}' }}</span>
+<span class="select-options d-none">{{ isset($pluginOptions) ? json_encode($pluginOptions) : '{}' }}</span>
+<span class="display-options d-none">{{ isset($displayOptions) ? json_encode($displayOptions) : '{}' }}</span>
