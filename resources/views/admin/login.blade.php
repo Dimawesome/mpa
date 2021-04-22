@@ -31,7 +31,7 @@
                             </div>
                             <div class="form-group">
                                 <button type="submit"
-                                        class="btn btn-purple btn-md">{{ trans('app.admin.login') }}</button>
+                                        class="btn btn-purple">{{ trans('app.admin.login') }}</button>
                             </div>
                         </form>
                     </div>

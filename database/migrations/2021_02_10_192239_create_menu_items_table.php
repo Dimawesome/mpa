@@ -23,14 +23,10 @@ class CreateMenuItemsTable extends Migration
         Schema::create('menu_items', function (Blueprint $table) {
             $table->id();
             $table->uuid('uid');
-            $table->foreignId('creator_id')->nullable()->constrained('users');
-            $table->string('type');
             $table->string('name');
             $table->text('url')->nullable();
             $table->integer('order')->unsigned();
             $table->string('status')->default('inactive');
-            $table->string('target')->nullable();
-            $table->string('language')->nullable();
 
             $table->timestamps();
         });
