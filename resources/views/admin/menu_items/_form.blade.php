@@ -10,7 +10,7 @@
             @include('helpers.form_control', [
                 'type' => 'text',
                 'name' => 'name',
-                'value' => $menu['name'] ?? '',
+                'value' => $menu['name'] ?? old('name'),
                 'label' => trans('app.admin.menu.title'),
                 'rules' => $rules
             ])
@@ -18,11 +18,11 @@
         <div class="col-md-6">
             @include('helpers.form_control', [
                 'type' => 'select',
-                'name' => 'page',
-                'id' => 'page',
+                'name' => 'url',
+                'id' => 'url',
                 'label' => trans('app.admin.menu.page_list'),
                 'placeholder' => trans('app.admin.menu.page'),
-                'value' => $menu['page'] ?? old('page'),
+                'value' => $menu['url'] ?? old('url'),
                 'rules' => $rules,
                 'options' => $pages,
                 'include_blank' => '',
@@ -36,7 +36,7 @@
                 'type' => 'checkbox',
                 'name' => 'status',
                 'value' => 'active',
-                'checked' => $menu['status'] === 'active',
+                'checked' => isset($menu['status']) && $menu['status'] === 'active',
                 'label' => trans('app.admin.menu.status_active')
             ])
         </div>

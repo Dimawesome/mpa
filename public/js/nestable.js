@@ -44,37 +44,17 @@ function updateNestableOutput(e) {
     //     handleNestableItemsOrder(items);_
     // }
 
-    if (typeof (node) !== 'undefined' && url !== undefined) {
+    if (node !== undefined && url !== undefined) {
         $.ajax({
             method: 'POST',
             url: url,
             data: {
+                _token: CSRF_TOKEN,
                 node: node
             }
-        }).done(function (msg) {
-            var type = 'success';
-
-            if (typeof (msg.status) !== 'undefined') {
-                type = msg.status;
-                msg = msg.message;
-            }
-
-            if (msg.indexOf('is-error') !== -1) {
-                type = 'error';
-            }
-
-            try {
-                var data = JSON.parse(msg);
-                type = data.status;
-                msg = data.message;
-            } catch (evt) {
-            }
-
-            if (typeof (msg) == 'object') {
-            }
-
-            if (msg !== '') {
-                notify(type, LANG_NOTIFY[type], msg);
+        }).done(function (response) {
+            if (response !== '') {
+                notify(response['type'], response['title'], response['message']);
             }
         });
     }

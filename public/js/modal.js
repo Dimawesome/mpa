@@ -99,15 +99,23 @@ function uploadModalData(_this, data) {
         url: $(_this).attr('href'),
         data: data,
         dataType: 'json',
-        success: function (data) {
-            var modulesList = $('.module-list-container');
-
-            if (data['type'] === 'error') {
-                // notify('error', LANG_NOTIFY['error'], LANG_NOTIFY['check_try_again']);
+        success: function (response) {
+            // var modulesList = $('.module-list-container');
+            if (response['type'] === 'error') {
+                notify('error', LANG_NOTIFY['error'], LANG_NOTIFY['check_try_again']);
             } else {
                 $('#myModal').modal('hide');
-                // notify(data['type'], data['title'], data['message']);
-                modulesList.load(modulesList.attr('data-url'));
+
+                if (response['type'] === 'success') {
+                    notify(response['type'], response['title'], response['message']);
+                }
+
+                if (response['url'] !== undefined) {
+                    window.location.href = (response['url']);
+                }
+
+                // modulesList.load(modulesList.attr('data-url'));
+                // window.location.reload();
             }
 
             overlay.hide();

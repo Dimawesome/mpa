@@ -3,17 +3,16 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder as EloquentBuilder;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Support\Str;
 
 /**
  * Class MenuItem
  *
  * @package App\Models
- * @mixix EloquentBuilder
+ * @mixin EloquentBuilder
  */
-class MenuItem extends Model
+class MenuItem extends BaseModel
 {
     use HasFactory;
 
@@ -23,14 +22,11 @@ class MenuItem extends Model
      * @var array
      */
     protected $fillable = [
-        'creator_id',
         'type',
         'name',
         'url',
         'order',
-        'status',
-        'target',
-        'language'
+        'status'
     ];
 
     /**
@@ -38,7 +34,7 @@ class MenuItem extends Model
      *
      * @return array
      */
-    public function rules()
+    public function rules(): array
     {
         return [
             'name' => 'required'
@@ -46,89 +42,22 @@ class MenuItem extends Model
     }
 
     /**
-     * Rel to model.
-     *
-     * @return BelongsTo
-     */
-    public function creator(): BelongsTo
-    {
-        return $this->belongsTo(User::class, 'creator_id');
-    }
-
-    /**
      * Bootstrap any application services.
      */
-    public static function boot()
+    public static function boot(): void
     {
         parent::boot();
         // Create uid when creating item.
         static::creating(function ($item) {
             // Create new uid
             $uid = uniqid();
+
             while (self::where('uid', '=', $uid)->count() > 0) {
                 $uid = uniqid();
             }
+
             $item->uid = $uid;
         });
-    }
-
-    /**
-     * Get all menu elements
-     *
-     * @return mixed
-     */
-    public function getAll()
-    {
-        return $this->select('*')->get()->toArray();
-    }
-
-
-
-
-
-
-    /**
-     * Find item by uid.
-     *
-     * @param $uid
-     * @return mixed
-     */
-    public function findByUid($uid)
-    {
-        return $this->where('uid', '=', $uid)->first();
-    }
-
-    /**
-     * Disable event.
-     */
-    public function disable()
-    {
-        $this->status = 'inactive';
-        $this->save();
-    }
-
-    /**
-     * Enable event.
-     */
-    public function enable()
-    {
-        $this->status = 'active';
-        $this->save();
-    }
-
-    /**
-     * Get allowed role list
-     *
-     * @param string $uid
-     * @return array|Application|Translator|string|null
-     */
-    public static function getAllowedRoleList(string $uid)
-    {
-        $roles = self::select('visible_to')
-            ->where('uid', '=', $uid)
-            ->get()->first();
-
-        return Role::getRoleList($roles);
     }
 
     /**
@@ -143,39 +72,13 @@ class MenuItem extends Model
         $child = $item ?: self::findByUid($uid);
         $tree = [];
 
-        while($child) {
+        while ($child) {
             array_unshift($tree, $child->name);
 
             $child = $child->parent;
         }
 
         return $tree;
-    }
-
-    /**
-     * Get all active page list
-     *
-     * @param string $uid
-     * @return array
-     */
-    public static function getActivePageList(string $uid): array
-    {
-        $pages = Page::getAllActive();
-        $options = [];
-
-        foreach ($pages->all() as $page) {
-            $roles = Role::getRoleList($page);
-            $name = (Lang::has("app.{$page->title}") && $page->is_default) ? trans("app.{$page->title}") : $page->title;
-            $options[] = [
-                'value' => $page->uid,
-                'text' => "$name ($roles)"
-            ];
-        }
-
-        $data['values'] = self::getSelectedPages($uid);
-        $data['options'] = $options;
-
-        return $data;
     }
 
     /**
@@ -212,5 +115,62 @@ class MenuItem extends Model
     public static function findByUrl()
     {
         return self::where('url', '=', '/' . request()->path())->first();
+    }
+
+    /**
+     * Get max order number
+     *
+     * @return int
+     */
+    public function getMaxOrder(): int
+    {
+        $modules = $this->getSortedMenuItems($this->getAll()->toArray());
+
+        return $modules ? last($modules)['order'] + 1 : 1;
+    }
+
+    /**
+     * Sort page modules
+     *
+     * @param array|null $items
+     * @return array|null
+     */
+    public function getSortedMenuItems(?array $items): ?array
+    {
+        return $items ? collect($items)->sortBy('order')->toArray() : null;
+    }
+
+
+    /**
+     * Create page url
+     *
+     * @param  $menu
+     * @param string $puid
+     * @return string
+     * TODO add page name
+     */
+    public function createPageUrl($menu, string $puid): string
+    {
+//        return json_encode(
+//            '/' . Page::findByUid($puid)->page_name . '/' . Str::slug($menu->name, '-') . "/$menu->$puid/$puid",
+//            JSON_THROW_ON_ERROR
+//        );
+
+        return json_encode('/' . 'lalala' . '/' . Str::slug($menu->name, '-') . "/$menu->uid/$puid");
+    }
+
+    /**
+     * Rebuild items order
+     *
+     * @param array $items
+     */
+    public function rebuildOrder(array $items): void
+    {
+        foreach ($items as $key => $item) {
+            if ($menu = $this->findByUid($item['uid'])) {
+                $menu->order = $key + 1;
+                $menu->save();
+            }
+        }
     }
 }
