@@ -12,28 +12,28 @@ $(function () {
     notifyAutoCall();
 
     /**
+     * Set data attribute to popover buttons
+     */
+    $(document).on('click', '.btn-popover', function (e) {
+        let _this = $(this);
+
+        $('.popover#' + _this.attr('aria-describedby') + ' .popover-body .popover-confirm')
+            .data('overlay-id', _this.data('overlay-id'));
+
+        e.preventDefault();
+    });
+
+    /**
      * Send ajax data on popover confirm
      */
-    $(document).on('click', '.popover .popover-confirm', function (e) {
+    $(document).on('click', '.popover .popover-confirm, a.ajax-load', function (e) {
         let _this = $(this),
-            overlay = _this.closest('.overlay');
+            overlay = $('#' + _this.data('overlay-id'));
 
-        overlay.show();
+        overlay.removeClass('d-none');
+
         setTimeout(function () {
-            $.ajax({
-                type: 'GET',
-                url: _this.attr('href'),
-                dataType: 'json',
-                success: function (response) {
-                    window.location.href = (response['url']);
-
-                    overlay.hide();
-                },
-                error: function () {
-                    notify('error', LANG_NOTIFY['error'], LANG_NOTIFY['check_try_again']);
-                    overlay.hide();
-                }
-            });
+            ajaxRedirectOnResponse(_this.attr('href'), overlay);
         }, 10);
 
         e.preventDefault();
@@ -45,6 +45,16 @@ $(function () {
     $(document).on('click', '.popover .popover-close', function () {
         $(this).closest('.popover').popover('hide');
     });
+
+    $(document).on('click', '.dropdown-menu', function (e) {
+        $('body .popover').length > 0 && $(this).parent().is('.show') && e.stopPropagation();
+    });
+
+    $(document).on('hide.bs.dropdown', '.dropdown-body', function () {
+        $('.popover').popover('hide');
+    });
+
+    $('.nav-link.active').closest('.submenu.collapse').collapse('show');
 });
 
 /**
@@ -54,21 +64,23 @@ $(function () {
  */
 function initJs(container) {
     container.find('.select').each(function () {
-        let selectOptions = $(this).parent('div').find('.select-options').html() !== undefined
-            ? $(this).parent('div').find('.select-options').html()
-            : '{}';
+        let _this = $(this),
+            selectOptions = _this.parent('div').find('.select-options').html() !== undefined
+                ? _this.parent('div').find('.select-options').html()
+                : '{}';
 
-        $(this).select2($.extend(
+        _this.select2($.extend(
             {
                 minimumResultsForSearch: 101,
                 placeholder: function () {
-                    $(this).attr('data-placeholder');
+                    _this.attr('data-placeholder');
                 },
                 dropdownAutoWidth: true,
-                width: $(this).hasClass('select-auto') ? 'auto' : '100%',
+                width: _this.hasClass('select-auto') ? 'auto' : '100%',
                 tags: true,
                 templateResult: formatSelect2TextOption,
-                templateSelection: formatSelect2TextSelected
+                templateSelection: formatSelect2TextSelected,
+                language: 'lt'
             },
             JSON.parse(selectOptions)
         ));
@@ -76,7 +88,7 @@ function initJs(container) {
 
     container.find('.btn-popover').each(function () {
         let _this = $(this),
-            url = _this.data('ajax-url').split("'")[1];
+            url = _this.data('ajax-url');
 
         _this.popover({
             trigger: 'click',
@@ -158,4 +170,25 @@ function notifyAutoCall() {
 
         notify(status, LANG_NOTIFY[status], alert.html());
     }
+}
+
+/**
+ * Send ajax data and redirect on response url
+ *
+ * @param url
+ * @param overlay
+ */
+function ajaxRedirectOnResponse(url, overlay) {
+    $.ajax({
+        type: 'GET',
+        url: url,
+        dataType: 'json',
+        success: function (response) {
+            window.location.href = (response['url']);
+        },
+        error: function () {
+            notify('error', LANG_NOTIFY['error'], LANG_NOTIFY['check_try_again']);
+            overlay.hide();
+        }
+    });
 }

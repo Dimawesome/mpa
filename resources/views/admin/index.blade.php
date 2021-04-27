@@ -8,11 +8,15 @@
             <nav class="col-md-2 d-none d-md-block bg-light sidebar">
                 @include('admin.partials._sidebar')
             </nav>
-            <div role="main" class="col-md-9 ml-sm-auto col-lg-10 pt-3 px-4">
+            <main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-4">
                 <div class="align-items-center pb-2 mb-3">
-                    @yield('content')
+                    @yield('header')
+
+                    <div class="content-body">
+                        @yield('content')
+                    </div>
                 </div>
-            </div>
+            </main>
         </div>
     </div>
 @stop

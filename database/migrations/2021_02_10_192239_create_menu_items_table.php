@@ -26,7 +26,7 @@ class CreateMenuItemsTable extends Migration
             $table->string('name');
             $table->text('url')->nullable();
             $table->integer('order')->unsigned();
-            $table->string('status')->default('inactive');
+            $table->string('is_active')->default(0);
 
             $table->timestamps();
         });

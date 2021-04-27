@@ -1,7 +1,9 @@
 <button type="button"
-        class="btn btn-popover {{ $classes ?? '' }}"
+        class="btn-popover {{ $classes ?? '' }} {{ isset($disabled) && $disabled ? ' disabled' : '' }}"
         data-toggle="popover"
         data-container="body"
+        data-overlay-id="{{ $overlayId ?? '' }}"
         data-placement="{{ $placement ?? 'top' }}"
         title="{!! $title ?? '' !!}"
-        {{ isset($ajaxUrl) ? "data-ajax-url='$ajaxUrl'" : '' }}>{!! $btnContent ?? '' !!}
+        {{ isset($disabled) && $disabled ? 'disabled=disabled' : 0 }}
+        {{ isset($ajaxUrl) ? "data-ajax-url=$ajaxUrl" : '' }}>{!! $btnContent ?? '' !!}

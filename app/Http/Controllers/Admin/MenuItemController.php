@@ -63,7 +63,7 @@ class MenuItemController extends Controller
         return \view('admin.menu_items.create', [
             'menu' => $this->menuItem->toArray(),
             'rules' => $this->menuItem->rules(),
-            'pages' => $this->page->getActivePageList()
+            'pages' => $this->menuItem->getActivePageList()
         ]);
     }
 
@@ -110,7 +110,7 @@ class MenuItemController extends Controller
         return \view('admin.menu_items.edit', [
             'menu' => $this->menuItem->findByUid($muid),
             'rules' => $this->menuItem->rules(),
-            'pages' => $this->page->getActivePageList($muid)
+            'pages' => $this->menuItem->getActivePageList($muid)
         ]);
     }
 
@@ -118,19 +118,18 @@ class MenuItemController extends Controller
      * Update the specified resource in storage.
      *
      * @param Request $request
-     * @param string $uid
      * @return JsonResponse
      * @throws ValidationException
      */
-    public function update(Request $request, string $uid): JsonResponse
+    public function update(Request $request): JsonResponse
     {
-        $menu = $this->menuItem->findByUid($uid);
+        $post = $request->post();
+        $menu = $this->menuItem->findByUid($post['muid']);
 
         if ($menu && $request->isMethod('patch')) {
-            $post = $request->post();
-
             $this->validate($request, $this->menuItem->rules());
             $menu->fill($post);
+            $menu->is_active = $post['is_active'] ?? 0;
             $menu->url = isset($post['url'])
                 ? $this->menuItem->createPageUrl($menu, $post['url'])
                 : null;
@@ -159,7 +158,7 @@ class MenuItemController extends Controller
             $menu->delete();
             $request->session()->flash('alert-success', trans('app.admin.menu.deleted'));
         } else {
-            $request->session()->flash('alert-error', trans('app.admin.menu.deleted'));
+            $request->session()->flash('alert-error', trans('app.notify.something_went_wrong'));
         }
 
         return response()->json([

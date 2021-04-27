@@ -16,7 +16,7 @@
 
 @include('partials._modals')
 
-@foreach (['success', 'error'] as $msg)
+@foreach (['success', 'error'] as $msg)'
     @if(Session::has("alert-$msg"))
         <div class="alert-notify d-none" data-status="{{ $msg }}">{{ Session::get("alert-$msg") }}</div>
     @endif

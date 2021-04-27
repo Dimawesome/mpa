@@ -5,7 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder as EloquentBuilder;
-use \Illuminate\Database\Eloquent\Collection;
+use Illuminate\Database\Eloquent\Collection;
 
 /**
  * Class BaseModel
@@ -16,6 +16,8 @@ use \Illuminate\Database\Eloquent\Collection;
 class BaseModel extends Model
 {
     use HasFactory;
+
+
 
     /**
      * Get all items
@@ -46,5 +48,27 @@ class BaseModel extends Model
     public function findByUid(string $uid)
     {
         return $this->where('uid', '=', $uid)->first();
+    }
+
+    /**
+     * Set item active parameter to 0
+     *
+     * @return void
+     */
+    public function disable(): void
+    {
+        $this->is_active = 0;
+        $this->save();
+    }
+
+    /**
+     * Set item active parameter to 1
+     *
+     * @return void
+     */
+    public function enable(): void
+    {
+        $this->is_active = 1;
+        $this->save();
     }
 }

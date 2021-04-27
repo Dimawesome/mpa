@@ -22,12 +22,28 @@ class MenuItem extends BaseModel
      * @var array
      */
     protected $fillable = [
-        'type',
         'name',
         'url',
         'order',
-        'status'
+        'is_active'
     ];
+
+    /**
+     * @var Page
+     */
+    protected Page $page;
+
+    /**
+     * MenuItem constructor.
+     *
+     * @param array $attributes
+     */
+    public function __construct(array $attributes = [])
+    {
+        $this->page = new Page();
+
+        parent::__construct($attributes);
+    }
 
     /**
      * Get validation rules.
@@ -42,7 +58,9 @@ class MenuItem extends BaseModel
     }
 
     /**
-     * Bootstrap any application services.
+     * Bootstrap any application services
+     *
+     * @return void
      */
     public static function boot(): void
     {
@@ -61,60 +79,45 @@ class MenuItem extends BaseModel
     }
 
     /**
-     * Get nested parents path
+     * Get selected page uid
      *
-     * @param string|null $uid
-     * @param null $item
-     * @return array
+     * @param string|null $muid
+     * @return string|null
      */
-    public static function getNestedParentsPath(?string $uid, $item = null): array
+    public function getSelectedPageUid(?string $muid): ?string
     {
-        $child = $item ?: self::findByUid($uid);
-        $tree = [];
+        $menu = $this->findByUid($muid);
 
-        while ($child) {
-            array_unshift($tree, $child->name);
-
-            $child = $child->parent;
-        }
-
-        return $tree;
-    }
-
-    /**
-     * Get selected pages uid
-     *
-     * @param string|null $uid
-     * @return array|null
-     */
-    public static function getSelectedPages(?string $uid): ?array
-    {
-        $menu = self::findByUid($uid);
-
-        if ($menu !== null && $menu->url_type === self::PAGE_TYPE && $menu->url !== null) {
-            $urls = json_decode($menu->url, true);
-
-            $pages = [];
-
-            foreach ($urls as $url) {
-                $urlSegments = explode('/', trim($url, '/'));
-                $pages[] = end($urlSegments);
-            }
-
-            return $pages;
+        if ($menu !== null && $menu->url !== null) {
+            $urlSegments = explode('/', trim($menu->url, '/'));
+            return end($urlSegments);
         }
 
         return null;
     }
 
     /**
-     * Find by url path
+     * Get all active page list
      *
-     * @return mixed
+     * @param string|null $muid
+     * @return array
      */
-    public static function findByUrl()
+    public function getActivePageList(?string $muid = null): array
     {
-        return self::where('url', '=', '/' . request()->path())->first();
+        $pages = $this->page->getAllActive();
+        $options = [];
+
+        foreach ($pages as $page) {
+            $options[] = [
+                'value' => $page['uid'],
+                'text' => $page['title']
+            ];
+        }
+
+        $data['values'] = $muid ? $this->getSelectedPageUid($muid) : [];
+        $data['options'] = $options;
+
+        return $data;
     }
 
     /**
@@ -147,16 +150,10 @@ class MenuItem extends BaseModel
      * @param  $menu
      * @param string $puid
      * @return string
-     * TODO add page name
      */
     public function createPageUrl($menu, string $puid): string
     {
-//        return json_encode(
-//            '/' . Page::findByUid($puid)->page_name . '/' . Str::slug($menu->name, '-') . "/$menu->$puid/$puid",
-//            JSON_THROW_ON_ERROR
-//        );
-
-        return json_encode('/' . 'lalala' . '/' . Str::slug($menu->name, '-') . "/$menu->uid/$puid");
+        return '/page/' . Str::slug($menu->name, '-') . "/$menu->$puid/$puid";
     }
 
     /**
