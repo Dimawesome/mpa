@@ -6,11 +6,6 @@
     </div>
 @stop
 
-@section('js')
-    {{--    <script type="text/javascript" src="{{ URL::asset('assets/lib/tinymce/tinymce.min.js') }}"></script>--}}
-    {{--    <script type="text/javascript" src="{{ URL::asset('js/editor.js') }}"></script>--}}
-@endsection
-
 @section('content')
     <div class="col-md-12">
         <form id="main-form"

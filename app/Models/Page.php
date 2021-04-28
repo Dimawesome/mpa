@@ -25,23 +25,6 @@ class Page extends BaseModel
     public static int $itemsPerPage = 25;
 
     /**
-     * @var Module
-     */
-    private Module $module;
-
-    /**
-     * Page constructor
-     *
-     * @param array $attributes
-     */
-    public function __construct(array $attributes = [])
-    {
-        $this->module = new Module();
-
-        parent::__construct($attributes);
-    }
-
-    /**
      * The attributes that are mass assignable
      *
      * @var array
@@ -68,7 +51,7 @@ class Page extends BaseModel
     public function rules(): array
     {
         return [
-            'title' => 'required',
+            'title' => 'required|max:30',
             'page_name' => 'regex:/^\S*$/u'
         ];
     }

@@ -13,6 +13,10 @@
 {{--<script type="text/javascript" src="{{ URL::asset('assets/lib/jquery-ui/js/interactions.min.js') }}"></script>--}}
 {{--<script type="text/javascript" src="{{ URL::asset('assets/lib/jquery-ui/js/touch.min.js') }}"></script>--}}
 
+<script type="text/javascript" src="{{ URL::asset('assets/lib/tinymce/tinymce.min.js') }}"></script>
+<script type="text/javascript" src="{{ URL::asset('js/editor.js') }}"></script>
+
+<script type="text/javascript" src="{{ URL::asset('js/validate.js?v=' . filemtime('js/validate.js')) }}"></script>
 <script type="text/javascript" src="{{ URL::asset('js/nestable.js?v=' . filemtime('js/nestable.js')) }}"></script>
 <script type="text/javascript" src="{{ URL::asset('js/listing.js?v=' . filemtime('js/listing.js')) }}"></script>
 <script type="text/javascript" src="{{ URL::asset('js/modal.js?v=' . filemtime('js/modal.js')) }}"></script>

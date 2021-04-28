@@ -1,0 +1,50 @@
+.mce-content-body {
+    font-size: 14px;
+    font-family: 'Source Sans Pro', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    color: #555;
+}
+
+.mce-item-table, .mce-item-table td, .mce-item-table th, .mce-item-table caption {
+    border: none;
+}
+
+.document-item {
+    border: 1px dashed #671b28;
+    background-color: #f0f0f0;
+    min-height: 56px;
+    position: relative;
+    display: block;
+    text-decoration: none;
+    margin-bottom: 3px;
+    width: 50%;
+    vertical-align: middle;
+}
+
+.document-item a {
+    text-decoration: none;
+}
+
+.document-item .document-icon {
+    border-right: 1px solid #cdcdcd;
+    height: 100%;
+    width: 55px;
+    display: flex;
+    position: absolute;
+    top: 0;
+    left: 0;
+    align-items: center;
+    justify-content: center;
+}
+
+.document-item .document-text {
+    vertical-align: middle;
+    display: block;
+    color: #656565;
+    font-size: 14px;
+    line-height: 100%;
+    padding: 20px 20px 20px 70px;
+}
+
+.document-item .document-icon {
+    color: #671b28;
+}

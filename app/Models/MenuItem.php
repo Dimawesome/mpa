@@ -53,7 +53,7 @@ class MenuItem extends BaseModel
     public function rules(): array
     {
         return [
-            'name' => 'required'
+            'name' => 'required|max:20'
         ];
     }
 

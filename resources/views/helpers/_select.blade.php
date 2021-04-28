@@ -1,5 +1,5 @@
 <select name="{{ $name }}"
-        id="{{ $id ?? '' }}"
+        id="{{ $id ?? $name }}"
         {{ isset($disabled) && $disabled == true ? ' disabled="disabled"' : "" }}
         @if(isset($placeholder))
         data-placeholder="{{ $placeholder }}"
@@ -11,6 +11,7 @@
         {{ isset($readonly) && $readonly == true ? ' readonly="readonly"' : "" }}
         {{ isset($onSelected['disable']) ? "data-disable={$onSelected['disable']}" : '' }}
         {{ isset($onSelected['enable']) ? "data-enable={$onSelected['enable']}" : '' }}
+        data-overlay-id="{{ $overlayId ?? '' }}"
 >
     @if (isset($include_blank))
         <option value="">{{ $include_blank }}</option>

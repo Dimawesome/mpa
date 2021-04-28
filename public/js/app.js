@@ -1,4 +1,6 @@
 $(function () {
+    "use strict";
+
     let body = $('body');
 
     $('form.jquery-form-validate').validate();
@@ -46,15 +48,48 @@ $(function () {
         $(this).closest('.popover').popover('hide');
     });
 
+    /**
+     * Do not close dropdown
+     */
     $(document).on('click', '.dropdown-menu', function (e) {
         $('body .popover').length > 0 && $(this).parent().is('.show') && e.stopPropagation();
     });
 
+    /**
+     * Hide all popovers when dropdown body hides
+     */
     $(document).on('hide.bs.dropdown', '.dropdown-body', function () {
         $('.popover').popover('hide');
     });
 
+    /**
+     * Do not collapse when submenu is active
+     */
     $('.nav-link.active').closest('.submenu.collapse').collapse('show');
+
+    /**
+     * Load select2 ajax content
+     */
+    $(document).on('select2:select', '.select-search.select2-content-loader', function () {
+        var _this = $(this);
+
+        loadAjaxContent(
+            _this.attr('data-content-url'),
+            _this.closest('.select2-content-container').find('.select2-content-body'),
+            $('#' + _this.data('overlay-id')),
+            {
+                value: _this.val()
+            }
+        );
+    });
+
+    /**
+     * Clear select2 ajax content
+     */
+    $(document).on('select2:clear', '.select-search.select2-content-loader', function () {
+        $(this).closest('.select2-content-container').find('.select2-content-body').html('');
+    });
+
 });
 
 /**
@@ -63,6 +98,10 @@ $(function () {
  * @param container
  */
 function initJs(container) {
+    setTimeout(function () {
+        setTinyMceReadonly();
+    }, 10);
+
     container.find('.select').each(function () {
         let _this = $(this),
             selectOptions = _this.parent('div').find('.select-options').html() !== undefined
@@ -183,12 +222,97 @@ function ajaxRedirectOnResponse(url, overlay) {
         type: 'GET',
         url: url,
         dataType: 'json',
+        cache: false,
         success: function (response) {
-            window.location.href = (response['url']);
+            if (response['url'] !== undefined) {
+                window.location.href = (response['url']);
+            }
+
+            if (response['listReload'] !== undefined && response['listReload']) {
+                let modulesList = $('.module-list-container');
+
+                modulesList.load(modulesList.attr('data-url'), function (){
+                    initJs($(this));
+                });
+            }
         },
         error: function () {
             notify('error', LANG_NOTIFY['error'], LANG_NOTIFY['check_try_again']);
             overlay.hide();
         }
     });
+}
+
+/**
+ * Load ajax content
+ *
+ * @param url
+ * @param contentBody
+ * @param overlay
+ * @param data
+ */
+function loadAjaxContent(url, contentBody, overlay, data) {
+    overlay.removeClass('d-none');
+    setTimeout(function () {
+        $.ajax({
+            type: 'POST',
+            dataType: 'html',
+            data: $.extend(data, {
+                _token: CSRF_TOKEN
+            }),
+            url: url,
+            success: function (response) {
+                contentBody.html(response);
+                initJs(contentBody);
+                overlay.hide();
+            },
+            error: function () {
+                notify('error', LANG_NOTIFY['error'], SOMETHING_WENT_WRONG);
+                overlay.hide();
+            }
+        });
+    }, 20);
+}
+
+/**
+ * Get created module list
+ *
+ * @returns {[]}
+ */
+function getModuleList() {
+    let module = {}, modules = [];
+
+    $('.module-list').find('li.dd3-item').each(function () {
+        let item = $(this);
+
+        module = {name: item.attr('data-name'), uid: item.attr('data-uid')};
+        modules.push(module);
+    });
+
+    return modules;
+}
+
+/**
+ * Get uploaded items keys object
+ *
+ * @param selector
+ * @returns {{}}
+ */
+function getUploadedItemKey(selector) {
+    var keys = {};
+
+    selector.closest('form').find('input[id="key"]').each(function (key) {
+        keys[key] = $(this).val();
+    });
+
+    return keys;
+}
+
+/**
+ * Set readonly to Tiny MCE editor
+ */
+function setTinyMceReadonly() {
+    if ($('textarea.basic-text-editor').attr('readonly')) {
+        tinymce.activeEditor.mode.set('readonly');
+    }
 }

@@ -17,10 +17,10 @@
                 </span>
                 </td>
                 <td class="text-center">
-                    <span class="text-muted2">{{ trans('app.admin.created_at') . ": $item->created_at" }}</span>
+                    <span class="text-muted">{{ trans('app.admin.created_at') . ": $item->created_at" }}</span>
                 </td>
                 <td class="text-center">
-                    <span class="text-muted2">{{ trans('app.admin.updated_at') . ": $item->updated_at" }}</span>
+                    <span class="text-muted">{{ trans('app.admin.updated_at') . ": $item->updated_at" }}</span>
                 </td>
                 <td class="text-center">
                     <span class="mr-3 status-circle bg-{{ $item['is_active'] ? 'success' : 'error' }}"></span>

@@ -7,7 +7,7 @@
     </div>
     <div class="dd3-content">
         <div class="row">
-            <div class="col-md-8">
+            <div class="col-md-3">
                 <span class="text-muted">
                     {{ trans('app.admin.title') . ': ' }}
                 </span>
@@ -15,7 +15,13 @@
                     {{ $item['name'] }}
                 </span>
             </div>
-            <div class="col-md-4 text-right">
+            <div class="col-md-3">
+                <span class="text-muted">{{ trans('app.admin.created_at') . ': ' . date_format(date_create($item['created_at']),'Y-m-d H:i:s') }}</span>
+            </div>
+            <div class="col-md-3">
+                <span class="text-muted">{{ trans('app.admin.updated_at') . ': ' . date_format(date_create($item['updated_at']),'Y-m-d H:i:s') }}</span>
+            </div>
+            <div class="col-md-3 text-right">
                 <span class="mr-3 status-circle bg-{{ $item['is_active'] ? 'success' : 'error' }}"></span>
                 <a href="{{ action('Admin\MenuItemController@edit', ['muid' => $item['uid']]) }}"
                    class="btn btn-xs btn-purple mc-modal-control" modal-size="xl"

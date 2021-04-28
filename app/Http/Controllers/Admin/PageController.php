@@ -13,7 +13,7 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Validation\ValidationException;
 use Illuminate\View\View;
-
+use Illuminate\Contracts\Container\BindingResolutionException;
 
 /**
  * Class PageController
@@ -133,8 +133,8 @@ class PageController extends Controller
 
         return \view('admin.pages.create', [
             'page' => $pageItem,
-            'view' => false
-            //'modules' => $pageItem ? $this->module->getSortedModules($this->module->getPageModules($pageItem->id)) : null
+            'view' => false,
+            'modules' => $pageItem ? $this->module->getSortedModules($this->module->getPageModules($pageItem->id)) : null
         ]);
     }
 
@@ -155,7 +155,7 @@ class PageController extends Controller
                 $pageItem->delete();
             } else {
                 $this->validate($request, $this->page->rules());
-//            $this->module->saveModulesOrder($request->post('modules'));
+                $this->module->saveModulesOrder($request->post('modules'));
                 $pageItem->fill($post);
 
                 $pageItem->save()
@@ -188,7 +188,7 @@ class PageController extends Controller
             return view('admin.pages.edit', [
                 'page' => $pageItem,
                 'view' => false,
-//            'modules' => $this->module->getSortedModules($this->module->getPageModules($page->id))
+                'modules' => $this->module->getSortedModules($this->module->getPageModules($pageItem->id))
             ]);
         }
 
@@ -203,6 +203,7 @@ class PageController extends Controller
      * @param Request $request
      * @return RedirectResponse
      * @throws ValidationException
+     * @throws BindingResolutionException
      */
     public function update(Request $request): RedirectResponse
     {
@@ -211,10 +212,9 @@ class PageController extends Controller
         if ($request->isMethod('patch') && $pageItem = $this->page->findByUid($post['puid'])) {
             if (!isset($post['cancel_btn']) || $post['cancel_btn'] !== 'cancel') {
                 $this->validate($request, $this->page->rules());
-//                $this->module->saveModulesOrder($request->post('modules'));
                 $pageItem->fill($post);
                 $pageItem->is_active = $post['is_active'] ?? 0;
-                $pageItem->save()
+                $this->module->saveModulesOrder($request->post('modules')) && $pageItem->save()
                     ? $request->session()->flash('alert-success', trans('app.admin.page.updated'))
                     : $request->session()->flash('alert-error', trans('app.notify.something_went_wrong'));
             }
@@ -237,10 +237,10 @@ class PageController extends Controller
         $pageItem = $this->page->findByUid($puid);
 
         if ($pageItem && $pageItem->is_deleted) {
-            return view('admin.pages.view', [
+            return \view('admin.pages.view', [
                 'page' => $pageItem,
                 'view' => true,
-//            'modules' => $this->module->getSortedModules($this->module->getPageModules($page->id))
+                'modules' => $this->module->getSortedModules($this->module->getPageModules($pageItem->id))
             ]);
         }
 

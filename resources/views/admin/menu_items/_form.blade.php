@@ -10,6 +10,7 @@
             @include('helpers.form_control', [
                 'type' => 'text',
                 'name' => 'name',
+                'id' => 'name-menu',
                 'value' => $menu['name'] ?? old('name'),
                 'label' => trans('app.admin.title'),
                 'rules' => $rules
@@ -19,7 +20,6 @@
             @include('helpers.form_control', [
                 'type' => 'select',
                 'name' => 'url',
-                'id' => 'url',
                 'label' => trans('app.admin.menu.page_list'),
                 'placeholder' => trans('app.admin.menu.page'),
                 'value' => $pages['values'],
@@ -35,13 +35,10 @@
             @include('helpers.form_control', [
                 'type' => 'select',
                 'name' => 'visible_to',
+                'id' => 'visible-to-menu',
                 'label' => trans('app.admin.visible_to'),
                 'placeholder' => trans('app.admin.visible_to_all'),
                 'options' => [],
-                'include_blank' => '',
-                'pluginOptions' => [
-                    'allowClear' => true
-                ],
                 'disabled' => true
             ])
         </div>

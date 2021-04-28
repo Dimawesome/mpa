@@ -145,9 +145,19 @@ a:hover {
     margin-top: -85px;
 }
 
-label.error {
-    margin: 5px 0 0 0;
-    color: #dc3545;
+body .validation-error-label {
+    color: #dc3545 !important;
+    margin-top: 3px;
+}
+
+body .has-error .form-control,
+body .has-error .tox-tinymce {
+    border-color: #ff8080;
+}
+
+body .has-error .form-control:focus {
+    border-color: #ff8080;
+    box-shadow: 0 0 0 0.2rem rgb(220 53 69 / 25%);
 }
 
 body .form-control {
@@ -155,8 +165,13 @@ body .form-control {
 }
 
 body .form-control:focus {
-    box-shadow: 0 0 0 0.2rem rgb(60 29 100 / 25%);
+    box-shadow: 0 0 0 0.2rem rgb(83 40 140 / 25%);
     border-color: #b380ff;
+}
+
+body .form-control:disabled, .form-control[readonly] {
+    background-color: #ede9ef;
+    opacity: 1;
 }
 
 /*
@@ -214,7 +229,7 @@ body .form-control:focus {
 .admin-panel .sidebar .nav-link {
     font-weight: 500;
     color: #333;
-    transition: color .1s ease-in-out,background-color .1s ease-in-out;
+    transition: color .1s ease-in-out, background-color .1s ease-in-out;
 }
 
 .admin-panel .sidebar .nav-link .feather {
@@ -393,12 +408,12 @@ body .form-control:focus {
     color: #333;
     text-decoration: none;
     border: 1px solid #e4e5e7;
-    background: #fafafa;
+    background: #fff;
     border-radius: 3px;
 }
 
 .dd3-content:hover {
-    background: #fff;
+    background: rgba(83, 40, 140, 0.1);
 }
 
 .dd-dragel > .dd3-item > .dd3-content {
@@ -414,7 +429,6 @@ body .form-control:focus {
     position: absolute;
     margin: 0;
     left: 0;
-    /*top: 20%;*/
     cursor: move;
     width: 30px;
     white-space: nowrap;
@@ -439,7 +453,7 @@ body .form-control:focus {
 
 .dd3-handle:hover,
 .dd-nodrag:hover {
-    color: #555;
+    color: #53288c;
 }
 
 .dd-nodrag {
@@ -448,13 +462,15 @@ body .form-control:focus {
 }
 
 .dd-nodrag-content {
-    background: none !important;
+    border: 1px solid #53288c;
+    color: #53288c;
 }
 
 .dd-nodrag-content:hover {
     font-weight: normal;
-    color: #333;
-    background: #fafafa !important;
+    color: #49247e;
+    background-color: #fff;
+    border-color: #49247e;
 }
 
 .dd-type-header .dd-name {
@@ -474,6 +490,22 @@ body .form-control:focus {
 
 .dd .dd-empty {
     all: unset;
+}
+
+.dd .dd-empty-list {
+    display: block;
+    width: 100%;
+    border-radius: 3px;
+    padding: 10px 0;
+    background: #fff;
+    text-align: center;
+    border: 1px dashed #ddd;
+}
+
+.dd .dd-empty-list .fa {
+    display: block;
+    font-size: 25px;
+    color: rgba(83, 40, 140, 0.5);
 }
 
 /*
@@ -517,7 +549,6 @@ body .form-control:focus {
 
 .mc-modal .modal-content .modal-footer,
 .new-modal .modal-content .modal-footer {
-    border-top: none;
     padding: 15px 40px 30px 40px;
 }
 
@@ -569,6 +600,11 @@ body .select2-container--default .select2-selection--single:not([class*=bg-]) {
 
 body .select2-container--default .select2-selection--single .select2-selection__arrow b {
     display: none;
+}
+
+body .select2-container--default.select2-container--disabled .select2-selection--single {
+    background-color: #ede9ef;
+    cursor: default;
 }
 
 body .select2-container--default .select2-selection--single .select2-selection__arrow:after {
@@ -838,7 +874,7 @@ body .styled-checkbox + label {
 }
 
 body .ui-pnotify .ui-pnotify-container {
-    width: 250px !important;
+    width: 300px !important;
     padding: 8px !important;
     border-radius: 3px !important;
     opacity: 95%;
@@ -852,7 +888,7 @@ body .bg-success {
 
 body .ui-pnotify .ui-pnotify-container.brighttheme.brighttheme-error,
 body .bg-error {
-    background-color: #a0193f;
+    background-color: #dc3545;
 }
 
 body .ui-pnotify .ui-pnotify-container.brighttheme .ui-pnotify-icon {
@@ -1110,7 +1146,7 @@ body .pagination-separated > li > span {
     background-color: #fff;
     border: 1px solid #53288c;
     border-radius: .25rem;
-    transition: color .15s ease-in-out,background-color .15s ease-in-out,border-color .15s ease-in-out,box-shadow .15s ease-in-out;
+    transition: color .15s ease-in-out, background-color .15s ease-in-out, border-color .15s ease-in-out, box-shadow .15s ease-in-out;
     display: inline-block;
     font-weight: 400;
     text-align: center;
@@ -1131,6 +1167,7 @@ body .pagination-separated > li > span:focus {
     border-color: #49247e;
     box-shadow: 0 0 0 0.2rem rgb(60 29 100 / 25%);
 }
+
 body .pagination-separated > li > a:not(:disabled):not(.disabled):active:focus,
 body .pagination-separated > li > span:not(:disabled):not(.disabled):active:focus {
     background-color: #fff;
@@ -1177,4 +1214,26 @@ body .pagination > .active > span:hover {
 
 .pagination > li {
     display: inline;
+}
+
+.close:hover {
+    color: #53288c;
+}
+
+@media (min-width: 992px) {
+    .modal-xxl {
+        max-width: 800px;
+    }
+}
+
+@media (min-width: 1200px) {
+    .modal-xxl {
+        max-width: 1150px;
+    }
+}
+
+@media (min-width: 1350px) {
+    .modal-xxl {
+        max-width: 1340px;
+    }
 }

@@ -4,15 +4,13 @@ $(function () {
         var size = $(this).attr('modal-size');
         var url = $(this).attr('href');
         var method = $(this).attr('data-method');
-        var load = htmlLoader();
 
         var modal = $('#myModal');
         modal.remove();
 
         var html = '<div class="mc-modal modal fade" role="dialog" id="myModal">' +
             '<div class="modal-dialog modal-' + size + ' modal-select">' +
-            '<div class="modal-content">' +
-            '<div class="loader-container">' + load + '</div></div></div></div>';
+            '<div class="modal-content">';
 
         $('body').append(html);
 
@@ -55,11 +53,11 @@ $(function () {
         if (modalForm.valid()) {
             var modalFormData = modalForm.serializeArray();
 
-            // if (tinyMCE.activeEditor !== null) {
-            //     modalFormData.push({name: 'text', value: tinyMCE.activeEditor.getContent({format: 'raw'})});
-            // }
+            if (tinyMCE.activeEditor !== null) {
+                modalFormData.push({name: 'text', value: tinyMCE.activeEditor.getContent({format: 'raw'})});
+            }
 
-            // modalFormData.push({name: 'keys', value: getUploadedItemKey($('#filemanager-upload'))})
+            modalFormData.push({name: 'keys', value: getUploadedItemKey($('#filemanager-upload'))})
 
             modalForm.find('input.select').each(function () {
                 var _this = $(this);
@@ -70,13 +68,13 @@ $(function () {
             if ($(this).hasClass('module-submit')) {
                 data = {
                     modal: modalFormData,
-                    // main: getModuleList()
+                    main: getModuleList()
                 }
             } else {
                 data = modalFormData;
             }
 
-            uploadModalData(this, data);
+            uploadModalData($(this), data);
         } else {
             $('.has-error').closest('.collapse').collapse('show');
         }
@@ -88,53 +86,52 @@ $(function () {
 /**
  * Upload modal data
  *
- * @param _this
+ * @param selector
  * @param data
  */
-function uploadModalData(_this, data) {
-    var overlay = $('.overlay');
+function uploadModalData(selector, data) {
+    let modulesList = $('.module-list-container'),
+        overlay = modulesList.find('.overlay');
 
-    $.ajax({
-        type: $(_this).attr('data-method'),
-        url: $(_this).attr('href'),
-        data: data,
-        dataType: 'json',
-        success: function (response) {
-            // var modulesList = $('.module-list-container');
-            if (response['type'] === 'error') {
+    setTimeout(function () {
+        overlay.removeClass('d-none');
+
+        $.ajax({
+            type: selector.attr('data-method'),
+            url: selector.attr('href'),
+            data: $.extend(data, {
+                _token: CSRF_TOKEN
+            }),
+            dataType: 'json',
+            success: function (response) {
+                if (response['type'] === 'error') {
+                    notify('error', LANG_NOTIFY['error'], LANG_NOTIFY['check_try_again']);
+                } else {
+                    $('#myModal').modal('hide');
+
+                    if (response['type'] === 'success' || response['type'] === 'error') {
+                        notify(response['type'], response['title'], response['message']);
+                    }
+
+                    if (response['url'] !== undefined) {
+                        window.location.href = (response['url']);
+                    }
+
+                    if (response['listReload'] !== undefined && response['listReload']) {
+
+
+                        modulesList.load(modulesList.attr('data-url'), function () {
+                            initJs($(this));
+                        });
+                    }
+                }
+
+                overlay.hide();
+            },
+            error: function () {
                 notify('error', LANG_NOTIFY['error'], LANG_NOTIFY['check_try_again']);
-            } else {
-                $('#myModal').modal('hide');
-
-                if (response['type'] === 'success') {
-                    notify(response['type'], response['title'], response['message']);
-                }
-
-                if (response['url'] !== undefined) {
-                    window.location.href = (response['url']);
-                }
-
-                // modulesList.load(modulesList.attr('data-url'));
-                // window.location.reload();
+                overlay.hide();
             }
-
-            overlay.hide();
-        },
-        error: function () {
-            // notify('error', LANG_NOTIFY['error'], LANG_NOTIFY['check_try_again']);
-            overlay.hide();
-        },
-        beforeSend: function () {
-            overlay.show();
-        }
-    });
-}
-
-/**
- * html loader
- *
- * @returns {string}
- */
-function htmlLoader() {
-    return '<div class="overlay text-purple justify-content-center d-none"><div class="spinner-border" role="status"></div></div>';
+        });
+    }, 20);
 }

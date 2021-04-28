@@ -1,6 +1,6 @@
 <input
         {{ isset($disabled) && $disabled ? ' disabled="disabled"' : "" }}
-        id="{{ $name }}"
+        id="{{ $id ?? $name }}"
         placeholder="{{ $placeholder ?? '' }}"
         value="{{ $value ?? '' }}"
         type="text"

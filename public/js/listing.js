@@ -65,7 +65,7 @@ function tableFilterAll() {
  * @returns {string}
  */
 function htmlLoader() {
-    return '<div class="overlay"><i class="fa fa-refresh fa-spin"></i></div>';
+    return '<div class="overlay text-purple justify-content-center"><div class="spinner-border" role="status"></div></div>';
 }
 
 /**

@@ -17,8 +17,6 @@ class BaseModel extends Model
 {
     use HasFactory;
 
-
-
     /**
      * Get all items
      *
@@ -57,8 +55,9 @@ class BaseModel extends Model
      */
     public function disable(): void
     {
-        $this->is_active = 0;
-        $this->save();
+        $this->update([
+            'is_active' => 0
+        ]);
     }
 
     /**
@@ -68,7 +67,8 @@ class BaseModel extends Model
      */
     public function enable(): void
     {
-        $this->is_active = 1;
-        $this->save();
+        $this->update([
+            'is_active' => 1
+        ]);
     }
 }

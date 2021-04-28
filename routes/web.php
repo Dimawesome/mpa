@@ -41,6 +41,20 @@ Route::group(['namespace' => 'Admin'], function () {
             Route::get('/pages/delete-all', 'PageController@deleteAll');
             Route::get('/pages/restore/{puid}', 'PageController@restore');
             Route::get('/pages/view/{puid}', 'PageController@view');
+
+            // Modules
+            Route::get('/modules', 'ModuleController@index');
+            Route::get('/modules/create/{puid}', 'ModuleController@create');
+            Route::post('/modules/store/{puid}', 'ModuleController@store');
+            Route::get('/modules/edit/{uid}/{name}/{puid}', 'ModuleController@edit');
+            Route::patch('/modules/update/{puid}', 'ModuleController@update');
+            Route::get('/modules/disable/{uid}/{name}', 'ModuleController@disable');
+            Route::get('/modules/enable/{uid}/{name}', 'ModuleController@enable');
+            Route::get('/modules/delete/{uid}/{name}', 'ModuleController@delete');
+            Route::get('/modules/view/{uid}/{name}/{puid}', 'ModuleController@view');
+            Route::post('/modules/module', 'ModuleController@getModule');
+            Route::get('/modules/list/{puid?}', 'ModuleController@moduleList');
+            Route::post('/modules/file-list', 'ModuleController@fileList');
         });
     });
 });

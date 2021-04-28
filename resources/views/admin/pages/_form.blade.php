@@ -3,6 +3,7 @@
         @include('helpers.form_control', [
             'type' => 'text',
             'name' => 'title',
+            'id' => 'title-page',
             'label' => trans('app.admin.title'),
             'value' => $page->title,
             'rules' => $page->rules(),
@@ -13,13 +14,10 @@
         @include('helpers.form_control', [
             'type' => 'select',
             'name' => 'visible_to',
+            'id' => 'visible-to-page',
             'label' => trans('app.admin.visible_to'),
             'placeholder' => trans('app.admin.visible_to_all'),
             'options' => [],
-            'include_blank' => '',
-            'pluginOptions' => [
-                'allowClear' => true
-            ],
             'disabled' => true
         ])
     </div>
@@ -28,15 +26,15 @@
             'type' => 'checkbox',
             'name' => 'is_active',
             'value' => 1,
-            'checked' => $page['is_active'],
+            'checked' => $page->is_active,
             'label' => trans('app.admin.status_active'),
             'disabled' => $view
         ])
     </div>
-    {{--    <div class="module-list-container"--}}
-    {{--         data-url="{{ action('ModuleController@moduleList', ['puid' => $page->uid]) }}">--}}
-    {{--        @include('admin.modules._list', ['modules' => $modules ?? null, 'page' => $page])--}}
-    {{--    </div>--}}
+    <div class="col-md-12 form-group module-list-container"
+         data-url="{{ action('Admin\ModuleController@moduleList', ['puid' => $page->uid]) }}">
+        @include('admin.modules._list', ['modules' => $modules ?? null, 'page' => $page])
+    </div>
 </div>
 <hr>
 <div class="text-center">
