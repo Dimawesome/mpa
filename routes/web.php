@@ -2,8 +2,14 @@
 
 use Illuminate\Support\Facades\Route;
 
-Route::get('/', 'DashboardController@index');
-Route::get('page/{slug}/{muid}/{puid}', 'PageController@page');
+Route::get('/', 'DashboardController@index')->name('dashboard');
+Route::get('page/{slug}/{muid}/{puid}', 'Admin\PageController@page');
+
+// Files
+Route::get('/files/file/{id}/{name?}', 'FileController@getFile')
+    ->where('name', '(.*)');
+
+Route::get('/files/thumbs/{id}/{name?}', 'FileController@getThumb');
 
 Route::group(['namespace' => 'Admin'], function () {
     Route::prefix('admin')->group(function () {
@@ -41,6 +47,7 @@ Route::group(['namespace' => 'Admin'], function () {
             Route::get('/pages/delete-all', 'PageController@deleteAll');
             Route::get('/pages/restore/{puid}', 'PageController@restore');
             Route::get('/pages/view/{puid}', 'PageController@view');
+            Route::get('/pages/preview/{puid}', 'PageController@preview');
 
             // Modules
             Route::get('/modules', 'ModuleController@index');
@@ -55,6 +62,7 @@ Route::group(['namespace' => 'Admin'], function () {
             Route::post('/modules/module', 'ModuleController@getModule');
             Route::get('/modules/list/{puid?}', 'ModuleController@moduleList');
             Route::post('/modules/file-list', 'ModuleController@fileList');
+            Route::post('/modules/sort', 'ModuleController@sort');
         });
     });
 });

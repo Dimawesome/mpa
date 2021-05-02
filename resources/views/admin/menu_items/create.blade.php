@@ -6,7 +6,7 @@
     <div class="modal-footer text-center d-block">
         <a href="{{ action('Admin\MenuItemController@store') }}"
            class="modal-submit" data-method="POST">
-            <button class="btn btn-purple btn-flat">
+            <button class="btn btn-purple">
                 <em class="fa fa-check"></em>
                 {{ trans('app.admin.save') }}
             </button>

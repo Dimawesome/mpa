@@ -1,10 +1,8 @@
 @extends('admin.index')
 
-@section('header')
-    <div class="col-md-12">
-        <h1 class="h2 m-0 pb-1 text-purple border-bottom">{{ trans('app.admin.menu.list') }}</h1>
-    </div>
-@stop
+@section('title', trans('app.admin.menu.list'))
+
+@section('header', trans('app.admin.menu.list'))
 
 @section('content')
     <div class="col-md-12 form-group">
@@ -15,7 +13,7 @@
     </div>
     <div class="col-md-12">
         @if (!empty($items))
-            <div class="dd" id="preference-nestable" data-action="{{ action('Admin\MenuItemController@sort') }}">
+            <div class="dd" id="menu-nestable" data-action="{{ action('Admin\MenuItemController@sort') }}">
                 <ol class="dd-list">
                     @foreach($items as $item)
                         @include('admin.menu_items._list_item', ['item' => $item])

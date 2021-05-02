@@ -13,6 +13,17 @@ $(function () {
             }
         });
     });
+
+    /**
+     * Delete dd item
+     */
+    $(document).on('click', '.dd .dd-delete', function (e) {
+        $(this).closest('li.dd-item').fadeOut(300, function () {
+            $(this).remove();
+        });
+
+        e.preventDefault();
+    });
 });
 
 /**

@@ -62,7 +62,6 @@ class Module extends BaseModel
      *
      * @param int $pid
      * @param bool $active
-     * @param bool $byRoles
      * @return array|null
      * @throws BindingResolutionException
      */
@@ -82,17 +81,6 @@ class Module extends BaseModel
     }
 
     /**
-     * Sort page modules
-     *
-     * @param array|null $modules
-     * @return array|null
-     */
-    public function getSortedModules(?array $modules): ?array
-    {
-        return $modules ? collect($modules)->sortBy('order')->toArray() : null;
-    }
-
-    /**
      * Save modules order
      *
      * @param array|null $items
@@ -104,16 +92,18 @@ class Module extends BaseModel
         $order = 1;
         if ($items) {
             foreach ($items as $item) {
-                if (
-                    ($moduleObject = $this->getModelObj($item['name']))
-                    && ($moduleItem = $moduleObject->findByUid($item['uid']))
-                ) {
-                    $moduleItem->order = $order;
-                    $moduleItem->save();
+                if (isset($item['name'])) {
+                    if (
+                        ($moduleObject = $this->getModelObj($item['name']))
+                        && ($moduleItem = $moduleObject->findByUid($item['uid']))
+                    ) {
+                        $moduleItem->order = $order;
+                        $moduleItem->save();
 
-                    ++$order;
-                } else {
-                    return false;
+                        ++$order;
+                    } else {
+                        return false;
+                    }
                 }
             }
         }
@@ -129,7 +119,7 @@ class Module extends BaseModel
      */
     public function getMaxOrder(?int $pid): int
     {
-        $modules = $this->getSortedModules($this->getPageModules($pid));
+        $modules = $this->sortByOrder($this->getPageModules($pid));
 
         return $modules ? last($modules)->order + 1 : 1;
     }

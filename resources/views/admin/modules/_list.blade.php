@@ -1,7 +1,7 @@
 <script type="text/javascript" src="{{ URL::asset('assets/lib/nestable/js/jquery.nestable.js') }}"></script>
 <script type="text/javascript" src="{{ URL::asset('js/nestable.js') }}"></script>
 <label class="text-purple">{{ trans('app.admin.module.modules') }}</label>
-<div class="dd" id="nestable">
+<div class="dd" id="module-nestable" data-action="{{ action('Admin\ModuleController@sort') }}">
     <ol class="dd-list module-list">
         @if ($modules)
             @foreach($modules as $module)

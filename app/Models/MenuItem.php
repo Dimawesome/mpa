@@ -104,7 +104,7 @@ class MenuItem extends BaseModel
      */
     public function getActivePageList(?string $muid = null): array
     {
-        $pages = $this->page->getAllActive();
+        $pages = $this->page->getAllActiveNotDeleted();
         $options = [];
 
         foreach ($pages as $page) {
@@ -127,22 +127,20 @@ class MenuItem extends BaseModel
      */
     public function getMaxOrder(): int
     {
-        $modules = $this->getSortedMenuItems($this->getAll()->toArray());
+        $modules = $this->sortByOrder($this->getAll());
 
         return $modules ? last($modules)['order'] + 1 : 1;
     }
 
     /**
-     * Sort page modules
+     * Get all active items sorted by order
      *
-     * @param array|null $items
-     * @return array|null
+     * @return array
      */
-    public function getSortedMenuItems(?array $items): ?array
+    public function getAllActiveSortedByOrder(): array
     {
-        return $items ? collect($items)->sortBy('order')->toArray() : null;
+        return $this->sortByOrder($this->getAllActive()) ?: [];
     }
-
 
     /**
      * Create page url
@@ -153,7 +151,7 @@ class MenuItem extends BaseModel
      */
     public function createPageUrl($menu, string $puid): string
     {
-        return '/page/' . Str::slug($menu->name, '-') . "/$menu->$puid/$puid";
+        return '/page/' . Str::slug($menu->name) . "/$menu->uid/$puid";
     }
 
     /**

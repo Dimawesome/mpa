@@ -3,6 +3,9 @@
 namespace App\Models;
 
 use Exception;
+use Illuminate\Contracts\Foundation\Application;
+use Illuminate\Contracts\View\Factory;
+use Illuminate\Contracts\View\View;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Builder as EloquentBuilder;
 use Illuminate\Http\Request;
@@ -81,7 +84,7 @@ class Page extends BaseModel
      *
      * @return array
      */
-    public function getAllActive(): array
+    public function getAllActiveNotDeleted(): array
     {
         return $this->select('*')
             ->where('is_active', '=', 1)
@@ -142,93 +145,20 @@ class Page extends BaseModel
         $this->where('is_deleted', '=', 1)->delete();
     }
 
-//    /**
-//     * Get page view
-//     *
-//     * @param Request $request
-//     * @param string|null $customView
-//     * @param LengthAwarePaginator|array|null $customData
-//     * @param string|null $id
-//     * @return Application|Factory|Response|View
-//     * @throws BindingResolutionException
-//     */
-//    public function getPage(Request $request, ?string $customView = null, $customData = null, ?string $id = null)
-//    {
-//        $page = self::searchByUid($request->puid);
-//        $menu = MenuItem::findByUid($request->muid);
-//        $pages = $this->getAvailablePages(MenuItem::getSelectedPages($request->muid));
-//
-//        if ($page === null) {
-//            $pageUrl = !empty($pages)
-//                ? $this->getPageUrlByPuid($request->muid, reset($pages)->uid)
-//                : null;
-//
-//            if ($pageUrl === null) {
-//                return response()->view('errors.404');
-//            }
-//
-//            return redirect($pageUrl);
-//        }
-//
-//        return view('dashboard._page', [
-//            'page' => $page,
-//            'pages' => $pages,
-//            'slug' => $request->slug,
-//            'menu' => $menu,
-//            'pathItems' => MenuItem::getNestedParentsPath($menu->uid),
-//            'customView' => $customView,
-//            'customData' => $customData,
-//            'id' => $id,
-//            'modules' => $page
-//                ? $this->module->getSortedModules($this->module->getModulesWithAdditionalData($page->id, true, true))
-//                : ''
-//        ]);
-//    }
-//
-//    /**
-//     * Get all available page list
-//     *
-//     * @param array|null $uids
-//     * @return array
-//     */
-//    public function getAvailablePages(?array $uids): array
-//    {
-//        $pages = [];
-//
-//        if ($uids !== null) {
-//            foreach ($uids as $uid) {
-//                $tmpPage = self::searchByUid($uid);
-//
-//                if ($tmpPage) {
-//                    $pages[] = $tmpPage;
-//                }
-//            }
-//        }
-//
-//        return $pages;
-//    }
-//
-//    /**
-//     * Get page url be puid
-//     *
-//     * @param string $muid
-//     * @param string $puid
-//     * @return string|null
-//     */
-//    public function getPageUrlByPuid(string $muid, string $puid): ?string
-//    {
-//        $urls = json_decode(MenuItem::findByUid($muid)->url, true);
-//
-//        if ($urls !== null) {
-//            foreach ($urls as $url) {
-//                $urlSegments = explode('/', trim($url, '/'));
-//
-//                if ($urlSegments[3] === $puid) {
-//                    return $url;
-//                }
-//            }
-//        }
-//
-//        return null;
-//    }
+    /**
+     * Get page view
+     *
+     * @param array $modules
+     * @param string $template
+     * @return Application|Factory|View
+     */
+    public function getPage($page, array $modules, $menu, string $template = 'dashboard._page', bool $preview = false)
+    {
+        return \view($template, [
+            'page' => $page,
+            'menu' => $menu,
+            'modules' => $modules,
+            'preview' => $preview
+        ]);
+    }
 }

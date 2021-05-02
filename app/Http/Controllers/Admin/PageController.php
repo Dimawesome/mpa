@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Models\MenuItem;
 use App\Models\Module;
 use App\Models\Page;
 use App\Http\Controllers\Controller;
@@ -33,15 +34,22 @@ class PageController extends Controller
     private Module $module;
 
     /**
+     * @var MenuItem
+     */
+    private MenuItem $menu;
+
+    /**
      * PageController constructor.
      *
      * @param Page $page
      * @param Module $module
+     * @param MenuItem $menu
      */
-    public function __construct(Page $page, Module $module)
+    public function __construct(Page $page, Module $module, MenuItem $menu)
     {
         $this->page = $page;
         $this->module = $module;
+        $this->menu = $menu;
     }
 
     /**
@@ -134,7 +142,7 @@ class PageController extends Controller
         return \view('admin.pages.create', [
             'page' => $pageItem,
             'view' => false,
-            'modules' => $pageItem ? $this->module->getSortedModules($this->module->getPageModules($pageItem->id)) : null
+            'modules' => $pageItem ? $this->module->sortByOrder($this->module->getPageModules($pageItem->id)) : null
         ]);
     }
 
@@ -155,7 +163,6 @@ class PageController extends Controller
                 $pageItem->delete();
             } else {
                 $this->validate($request, $this->page->rules());
-                $this->module->saveModulesOrder($request->post('modules'));
                 $pageItem->fill($post);
 
                 $pageItem->save()
@@ -188,7 +195,7 @@ class PageController extends Controller
             return view('admin.pages.edit', [
                 'page' => $pageItem,
                 'view' => false,
-                'modules' => $this->module->getSortedModules($this->module->getPageModules($pageItem->id))
+                'modules' => $this->module->sortByOrder($this->module->getPageModules($pageItem->id))
             ]);
         }
 
@@ -203,7 +210,6 @@ class PageController extends Controller
      * @param Request $request
      * @return RedirectResponse
      * @throws ValidationException
-     * @throws BindingResolutionException
      */
     public function update(Request $request): RedirectResponse
     {
@@ -214,7 +220,7 @@ class PageController extends Controller
                 $this->validate($request, $this->page->rules());
                 $pageItem->fill($post);
                 $pageItem->is_active = $post['is_active'] ?? 0;
-                $this->module->saveModulesOrder($request->post('modules')) && $pageItem->save()
+                $pageItem->save()
                     ? $request->session()->flash('alert-success', trans('app.admin.page.updated'))
                     : $request->session()->flash('alert-error', trans('app.notify.something_went_wrong'));
             }
@@ -240,7 +246,7 @@ class PageController extends Controller
             return \view('admin.pages.view', [
                 'page' => $pageItem,
                 'view' => true,
-                'modules' => $this->module->getSortedModules($this->module->getPageModules($pageItem->id))
+                'modules' => $this->module->sortByOrder($this->module->getPageModules($pageItem->id))
             ]);
         }
 
@@ -359,15 +365,48 @@ class PageController extends Controller
         ]);
     }
 
-//    /**
-//     * Show page with content and files
-//     *
-//     * @param Request $request
-//     * @return Application|Factory|Response|View
-//     * @throws BindingResolutionException
-//     */
-//    public function page(Request $request)
-//    {
-//        return $this->page->getPage($request);
-//    }
+    /**
+     * Show page with content and files
+     *
+     * @param Request $request
+     * @param string $slug
+     * @param string $muid
+     * @param string $puid
+     * @return Application|Factory|View|RedirectResponse
+     * @throws BindingResolutionException
+     */
+    public function page(Request $request, string $slug, string $muid, string $puid)
+    {
+        if (($pageItem = $this->page->findByUid($puid)) && $menuItem = $this->menu->findByUid($muid)) {
+            return $this->page->getPage(
+                $pageItem,
+                $this->module->sortByOrder($this->module->getModulesWithAdditionalData($pageItem->id, true)),
+                $menuItem
+            );
+        }
+
+        return redirect()->route('dashboard');
+    }
+
+    /**
+     * Return page for preview
+     *
+     * @param string $puid
+     * @return Application|Factory|View|string
+     * @throws BindingResolutionException
+     */
+    public function preview(string $puid)
+    {
+        if ($pageItem = $this->page->findByUid($puid)) {
+            return $this->page->getPage(
+                $pageItem,
+                $this->module->sortByOrder($this->module->getModulesWithAdditionalData($pageItem->id, true)),
+                null,
+                'admin.pages.preview',
+                true
+            );
+        }
+
+        return '';
+    }
 }

@@ -28,21 +28,28 @@ $(function () {
         }).always(function (response) {
             var modalContent = $('#myModal .modal-content');
 
-            modalContent.html(response);
-            // // Select2 ajax
-            // modalContent.find(".select2-ajax").each(function () {
-            //     select2Ajax($(this));
-            // });
-            //
-            initJs(modalContent);
-            // addCollapsedClass(modalContent);
+            if (response === '') {
+                notify('error', LANG_NOTIFY['error'], LANG_NOTIFY['check_try_again']);
+                modal.modal('hide');
+            } else {
+                modalContent.html(response);
+                initJs(modalContent);
+            }
         }).fail(function (jqXHR) {
-            html = '<div class="modal-body"><prex class="text-danger">' + jqXHR.responseText + '</prex></div>';
+            notify('error', LANG_NOTIFY['error'], LANG_NOTIFY['check_try_again']);
 
-            $('#myModal .modal-content').html(html);
+            setTimeout(function () {
+                modal.modal('hide');
+            }, 500);
         });
 
         return false;
+    });
+
+    $(document).on('click', '.modal-close', function (e) {
+        e.preventDefault();
+
+        $('#myModal').modal('hide');
     });
 
     $(document).on('click', '#modal-form .modal-submit', function (e) {

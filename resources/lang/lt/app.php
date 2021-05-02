@@ -2,6 +2,7 @@
 
 return [
     'admin' => [
+        'close' => 'Uždaryti',
         'admin' => 'Administravimas',
         'login_form' => 'Prisijungimas',
         'username' => 'Vartotojo vardas',
@@ -66,13 +67,13 @@ return [
             'deleted' => 'Puslapis ištrintas',
             'restored' => 'Puslapis atkurtas',
             'editing' => 'Puslapio redagavimas',
-            'review' => 'Puslapio peržiūra',
+            'preview' => 'Puslapio peržiūra',
             'trash_can' => 'Puslapių šiukšliadėžė',
         ],
         'module' => [
             'administration' => 'Modulio administravimas',
             'text' => 'Tekstas',
-            'file' => 'Dokumentas',
+            'file' => 'Failas',
             'modules' => 'Moduliai',
             'module' => 'Modulis',
             'add' => 'Pridėti modulį',
@@ -86,6 +87,17 @@ return [
             'choose' => 'Pasirinkite modulį',
             'content' => 'Modulio turinys',
             'name' => 'Modulio pavadinimas',
+            'sorted' => 'Moduliu tvarka atnaujinta',
+        ],
+        'module_file' => [
+            'add' => 'Pridėti failą (-us)',
+            'name' => 'Failo pavadinimas',
+            'width' => 'Modulio plotis',
+            'download' => 'Parsisiųsti',
+            'open' => 'Atidaryti',
+            'download_open' => 'Parsisiųsti / Atidaryti',
+            'url' => 'Nuoroda',
+            'updated' => 'failas atnaujintas',
         ]
     ],
     'notify' => [
@@ -103,4 +115,11 @@ return [
         'yes' => 'Taip',
         'no' => 'Ne',
     ],
+    'mpa_system' => 'Modulinio puslapių administravimo sistema',
+    'mpa' => 'MPA',
+    'mpa_web' => 'MPA tinklapis',
+    'main' => 'Pagrindinis',
+    'menu' => 'Menu',
+    'menu_title' => 'Menu pavadinimas',
+    'page_title' => 'Puslapio pavadinimas',
 ];

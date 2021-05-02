@@ -70,7 +70,7 @@ class Uidd
         );
 
         if (is_object($app['auth']->user())) {
-            $user_uid = Auth::user()->objectguid;
+            $user_uid = Auth::user()->id;
             $max_size_upload_total = is_object($app['auth']->user()->customer) && $app['auth']->user()->customer->getOption("max_size_upload_total") > 0 ? $app['auth']->user()->customer->getOption("max_size_upload_total") : 999999999;
             $max_file_size_upload = is_object($app['auth']->user()->customer) && $app['auth']->user()->customer->getOption("max_file_size_upload") > 0 ? $app['auth']->user()->customer->getOption("max_file_size_upload") : 999999999;
         } else {
@@ -137,8 +137,8 @@ $config = array(
     | with start and final /
     |
     */
-    'upload_dir' => $base_r_url . 'files/' . $user_uid . "/",
-    'thumb_dir' => $base_r_url . 'files/thumbs/' . $user_uid . "/",
+    'upload_dir' => "{$base_r_url}files/file/$user_uid/",
+    'thumb_dir' => "{$base_r_url}files/thumbs/$user_uid/",
     /*
     |--------------------------------------------------------------------------
     | relative path from filemanager folder to upload folder

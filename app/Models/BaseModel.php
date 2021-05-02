@@ -20,21 +20,32 @@ class BaseModel extends Model
     /**
      * Get all items
      *
-     * @return BaseModel[]|Collection
+     * @return Collection
      */
-    public function getAll()
+    public function getAll(): Collection
     {
         return $this->select('*')->get();
     }
 
     /**
-     * Get all items by order
+     * Sort page modules
+     *
+     * @param $items
+     * @return array
+     */
+    public function sortByOrder($items): array
+    {
+        return $items ? collect($items)->sortBy('order')->toArray() : [];
+    }
+
+    /**
+     * Get all active items
      *
      * @return Collection
      */
-    public function getAllSortedByOrder(): Collection
+    public function getAllActive(): Collection
     {
-        return $this->getAll()->sortBy('order');
+        return $this->select('*')->where('is_active', '=', true)->get();
     }
 
     /**

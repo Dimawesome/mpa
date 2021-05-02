@@ -1,16 +1,20 @@
 <!doctype html>
 <html>
 <head>
-    <title>Modulinis puslapiu administravimas</title>
+    <title>
+        @yield('title', trans('app.mpa')) - {{ trans('app.mpa') }}
+    </title>
 
     @include('partials._head')
 
-    @include('partials._js')
+    @if (!isset($preview) || !$preview)
+        @include('partials._css')
 
-    @include('partials._css')
+        @include('partials._js')
+    @endif
 
 </head>
-<body class="@yield('body_color')">
+<body class="@yield('body_class')">
 
 @yield('body')
 

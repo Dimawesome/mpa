@@ -2,19 +2,21 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Contracts\Foundation\Application;
-use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
-use Illuminate\Http\Request;
 
+/**
+ * Class DashboardController
+ *
+ * @package App\Http\Controllers
+ */
 class DashboardController extends Controller
 {
     /**
      * Show dashboard page
-     * @return Application|Factory|View
+     * @return View
      */
-    public function index()
+    public function index(): View
     {
-        return view('dashboard');
+        return \view('dashboard.dashboard');
     }
 }

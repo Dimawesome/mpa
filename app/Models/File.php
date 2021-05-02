@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Query\Builder;
 use Illuminate\Support\Facades\DB;
 
 /**
@@ -23,12 +24,12 @@ class File extends Module
     /**
      * @var string
      */
-    protected $filesTableName = 'module_file_has_files';
+    protected string $filesTableName = 'module_file_has_files';
 
     /**
      * @var Builder
      */
-    protected $filesTable;
+    protected Builder $filesTable;
 
     /**
      * File constructor
@@ -49,11 +50,11 @@ class File extends Module
      */
     protected $fillable = [
         'name',
+        'page_id',
         'title',
-        'url',
         'order',
-        'visible_to',
-        'status'
+        'is_active',
+        'open'
     ];
 
     /**
@@ -127,23 +128,23 @@ class File extends Module
      *
      * @param array $post
      */
-//    public function saveAdditionalRecords(array $post): void
-//    {
-//        $order = 0;
-//
-//        $this->removeDeletedFiles($post, $this->id);
-//
-//        if (!empty($post['keys'])) {
-//            foreach ($post['keys'] as $key) {
-//                DB::table($this->filesTableName)->updateOrInsert(
-//                    ['id' => $post["id_$key"]],
-//                    $this->getFilesFormattedArray($post, $key, $order, $this->id)
-//                );
-//
-//                ++$order;
-//            }
-//        }
-//    }
+    public function saveAdditionalRecords(array $post): void
+    {
+        $order = 0;
+
+        $this->removeDeletedFiles($post, $this->id);
+
+        if (!empty($post['keys'])) {
+            foreach ($post['keys'] as $key) {
+                DB::table($this->filesTableName)->updateOrInsert(
+                    ['id' => $post["id_$key"]],
+                    $this->getFilesFormattedArray($post, $key, $order, $this->id)
+                );
+
+                ++$order;
+            }
+        }
+    }
 
     /**
      * Remove deleted files

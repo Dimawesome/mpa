@@ -111,17 +111,13 @@ class ModuleController extends Controller
             && !$this->page->findByUid($puid)->is_deleted
         ) {
 
-            $additionalData = array_merge(
-                $this->module->getSelectOptions(),
-                method_exists($moduleItem, 'getAdditionalData')
-                    ? $moduleItem->getAdditionalData($moduleItem)
-                    : []
-            );
-
             return \view('admin.modules.edit', [
                 'module' => $moduleItem,
                 'rules' => array_merge($this->module->rules(), $moduleObject->rules()),
-                'additionalData' => $additionalData,
+                'additionalData' => $this->module->getSelectOptions(),
+                'data' => method_exists($moduleItem, 'getAdditionalData')
+                    ? $moduleItem->getAdditionalData($moduleItem)
+                    : [],
                 'puid' => $puid,
                 'view' => false
             ]);
@@ -207,6 +203,34 @@ class ModuleController extends Controller
         $request->session()->flash('alert-error', trans('app.notify.something_went_wrong'));
 
         return redirect()->back();
+    }
+
+    /**
+     * Sort items
+     *
+     * @param Request $request
+     * @return JsonResponse
+     * @throws BindingResolutionException
+     */
+    public function sort(Request $request): JsonResponse
+    {
+        $node = $request->post('node');
+
+        if (isset($node) && !empty($node)) {
+            $this->module->saveModulesOrder($node);
+
+            return response()->json([
+                'type' => 'success',
+                'title' => trans('app.notify.success'),
+                'message' => trans('app.admin.module.sorted')
+            ]);
+        }
+
+        return response()->json([
+            'type' => 'error',
+            'title' => trans('error.notify.success'),
+            'message' => trans('app.notify.something_went_wrong')
+        ]);
     }
 
     /**
@@ -329,26 +353,30 @@ class ModuleController extends Controller
         $pageItem = $this->page->findByUid($puid);
 
         return \view('admin.modules._list', [
-            'modules' => $pageItem ? $this->module->getSortedModules($this->module->getPageModules($pageItem->id)) : null,
+            'modules' => $pageItem ? $this->module->sortByOrder($this->module->getPageModules($pageItem->id)) : null,
             'page' => $pageItem,
             'view' => $pageItem->is_deleted
         ]);
     }
 
-//    /**
-//     * Get module file list
-//     *
-//     * @param Request $request
-//     * @return View
-//     * @throws BindingResolutionException
-//     */
-//    public function fileList(Request $request): View
-//    {
-//        $model = $this->module->getModelObj('file');
-//
-//        return \view('admin.modules.partials._file_list', [
-//            'data' => $request->post(),
-//            'rules' => $model->rules()
-//        ]);
-//    }
+    /**
+     * Get module file list
+     *
+     * @param Request $request
+     * @return View
+     * @throws BindingResolutionException
+     */
+    public function fileList(Request $request): View
+    {
+        $moduleObj = $this->module->getModelObj('file');
+        $post = $request->post();
+        unset($post['_token']);
+
+        if ($moduleObj) {
+            return \view('admin.modules.partials._file_list', [
+                'data' => $post,
+                'rules' => $moduleObj->rules()
+            ]);
+        }
+    }
 }

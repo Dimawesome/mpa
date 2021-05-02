@@ -49,7 +49,7 @@ class MenuItemController extends Controller
     public function index(): View
     {
         return \view('admin.menu_items.index', [
-            'items' => $this->menuItem->getAllSortedByOrder()->toArray()
+            'items' => $this->menuItem->sortByOrder($this->menuItem->getAll())
         ]);
     }
 

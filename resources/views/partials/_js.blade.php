@@ -10,6 +10,7 @@
 <script type="text/javascript" src="{{ URL::asset('assets/lib/pnotify/js/PNotify.js') }}"></script>
 <script type="text/javascript" src="{{ URL::asset('assets/lib/pnotify/js/PNotifyButtons.js') }}"></script>
 <script type="text/javascript" src="{{ URL::asset('assets/lib/nonblock/js/NonBlock.js') }}"></script>
+<script type="text/javascript" src="{{ URL::asset('assets/lib/fancybox/dist/jquery.fancybox.min.js') }}"></script>
 {{--<script type="text/javascript" src="{{ URL::asset('assets/lib/jquery-ui/js/interactions.min.js') }}"></script>--}}
 {{--<script type="text/javascript" src="{{ URL::asset('assets/lib/jquery-ui/js/touch.min.js') }}"></script>--}}
 

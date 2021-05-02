@@ -37,7 +37,7 @@
     </div>
 </div>
 <hr>
-<div class="text-center">
+<div class="col-md-12 text-center">
     @if ($view)
         <a href="{{ url()->previous() }}" type="button" class="btn btn-gray"><em
                     class="fa fa-times"></em>{{ trans('app.admin.back') }}</a>
@@ -46,5 +46,10 @@
                     class="fa fa-ban"></em>{{ trans('app.admin.cancel') }}</button>
         <button class="btn btn-purple"><em class="fa fa-check"></em>{{ trans('app.admin.save') }}</button>
     @endif
+    <a href="{{ action('Admin\PageController@preview', ['puid' => $page->uid]) }}" type="button"
+       class="btn btn-purple mc-modal-control float-right" modal-size="xxl"
+       data-method="GET" title="{{ trans('app.admin.page.preview') }}">
+        <em class="fa fa-eye m-0"></em>
+    </a>
 </div>
 @include('partials._html_loader')

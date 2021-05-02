@@ -137,6 +137,21 @@ function initJs(container) {
                 + POPOVER['no'] + '</a>'
         });
     });
+
+    container.find('[data-fancybox]').each(function () {
+        $(this).fancybox({
+            toolbar: false,
+            smallBtn: true,
+            iframe: {
+                preload: true,
+                css: {
+                    width: '65%',
+                    height: '80%'
+                }
+            },
+            spinnerTpl: '<div class="fancybox-loading"><div class="overlay text-purple justify-content-center"><div class="spinner-border" role="status"></div></div></div>'
+        });
+    });
 }
 
 /**
@@ -228,10 +243,14 @@ function ajaxRedirectOnResponse(url, overlay) {
                 window.location.href = (response['url']);
             }
 
+            if (response['type'] === 'success' || response['type'] === 'error') {
+                notify(response['type'], response['title'], response['message']);
+            }
+
             if (response['listReload'] !== undefined && response['listReload']) {
                 let modulesList = $('.module-list-container');
 
-                modulesList.load(modulesList.attr('data-url'), function (){
+                modulesList.load(modulesList.attr('data-url'), function () {
                     initJs($(this));
                 });
             }
@@ -293,6 +312,84 @@ function getModuleList() {
 }
 
 /**
+ * Set readonly to Tiny MCE editor
+ */
+function setTinyMceReadonly() {
+    if ($('textarea.basic-text-editor').attr('readonly')) {
+        tinymce.activeEditor.mode.set('readonly');
+    }
+}
+
+/**
+ * Get page name from url
+ *
+ * @param url
+ * @returns {*}
+ */
+function getPageName(url) {
+    return decodeURI(url.substr(url.lastIndexOf('/') + 1).split('.')[0]);
+}
+
+/**
+ * Responsive filemanager plugin's callback
+ *
+ * @param field_id
+ */
+function responsive_filemanager_callback(field_id) {
+    var selector = $('#' + field_id),
+        uploadedData = [],
+        data = {},
+        overlay = $('#' + selector.data('overlay-id')),
+        maxKey = getMaxObjectValue(getUploadedItemKey(selector)),
+        keyData = selector.data('key');
+
+    try {
+        uploadedData = JSON.parse(selector.val());
+    } catch (e) {
+        uploadedData.push(selector.val());
+    }
+
+    if (keyData !== undefined) {
+        $('input[name=url_' + keyData + ']').val(uploadedData[0]);
+        notify('success', LANG_NOTIFY['success'], '<em>„' + $('input[name=filename_' + keyData + ']').val() + '“</em><br>' + FILE_UPDATED);
+
+        return;
+    }
+
+    $.each(uploadedData, function (key, value) {
+        data[maxKey + 1] = {
+            name: getPageName(value),
+            url: value
+        }
+
+        maxKey += 1;
+    });
+
+    $.ajax({
+        url: selector.attr('data-href'),
+        type: selector.attr('data-method'),
+        data: $.extend(data, {
+            _token: CSRF_TOKEN
+        }),
+        success: function (response) {
+            var body = $('body');
+
+            $(response).insertBefore('.filemanager-list .dd-fixed');
+            initJs(body);
+            addCollapsedClass(body);
+            overlay.hide();
+        },
+        error: function () {
+            notify('error', LANG_NOTIFY['error'], LANG_NOTIFY['check_try_again']);
+            overlay.hide();
+        },
+        beforeSend: function () {
+            overlay.removeClass('d-none');
+        }
+    });
+}
+
+/**
  * Get uploaded items keys object
  *
  * @param selector
@@ -309,10 +406,30 @@ function getUploadedItemKey(selector) {
 }
 
 /**
- * Set readonly to Tiny MCE editor
+ * Get max object's value
+ *
+ * @param obj
+ * @returns {number}
  */
-function setTinyMceReadonly() {
-    if ($('textarea.basic-text-editor').attr('readonly')) {
-        tinymce.activeEditor.mode.set('readonly');
+function getMaxObjectValue(obj) {
+    if (!$.isEmptyObject(obj)) {
+        var values = Object.values(obj);
+
+        return Math.max.apply(null, values);
     }
+
+    return -1;
+}
+
+/**
+ * Add 'collapsed' class to toggle button (necessary for expand/collapse icon display)
+ *
+ * @param selector
+ */
+function addCollapsedClass(selector) {
+    selector.find('.btn[data-toggle=collapse]').each(function () {
+        if ($(this).attr('aria-expanded') === 'false') {
+            $(this).addClass('collapsed');
+        }
+    });
 }
