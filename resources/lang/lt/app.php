@@ -68,6 +68,7 @@ return [
             'restored' => 'Puslapis atkurtas',
             'editing' => 'Puslapio redagavimas',
             'preview' => 'Puslapio peržiūra',
+            'review' => 'Puslapio peržiūra',
             'trash_can' => 'Puslapių šiukšliadėžė',
         ],
         'module' => [
@@ -88,6 +89,8 @@ return [
             'content' => 'Modulio turinys',
             'name' => 'Modulio pavadinimas',
             'sorted' => 'Moduliu tvarka atnaujinta',
+            'card' => 'Kortelė',
+            'file_manager_title' => 'Failų tvarkiklė',
         ],
         'module_file' => [
             'add' => 'Pridėti failą (-us)',
@@ -98,6 +101,18 @@ return [
             'download_open' => 'Parsisiųsti / Atidaryti',
             'url' => 'Nuoroda',
             'updated' => 'failas atnaujintas',
+        ],
+        'module_card' => [
+            'title' => 'Kortelės antraštė',
+            'url' => 'Nuoroda',
+            'content' => 'Kortelės turinys',
+            'width' => 'Modulio plotis',
+            'align' => 'Turinio lygiavimas',
+            'left' => 'Kairėje',
+            'center' => 'Centre',
+            'right' => 'Dešinėje',
+            'page' => 'Puslapis',
+            'page_list' => 'Puslapių sąrašas',
         ]
     ],
     'notify' => [
@@ -122,4 +137,7 @@ return [
     'menu' => 'Menu',
     'menu_title' => 'Menu pavadinimas',
     'page_title' => 'Puslapio pavadinimas',
+    'more' => 'Plačiau',
+    'preview' => 'Peržiūrėti',
+    'login_error' => 'Neteisingi prisijungimo duomenys',
 ];

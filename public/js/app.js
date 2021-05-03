@@ -32,7 +32,7 @@ $(function () {
         let _this = $(this),
             overlay = $('#' + _this.data('overlay-id'));
 
-        overlay.removeClass('d-none');
+        overlay.removeClass('d-none').show();
 
         setTimeout(function () {
             ajaxRedirectOnResponse(_this.attr('href'), overlay);
@@ -90,6 +90,10 @@ $(function () {
         $(this).closest('.select2-content-container').find('.select2-content-body').html('');
     });
 
+    $(document).on('change', '.radio-box-group input:radio', function () {
+        setReadonlyToRadioContent();
+        // deleteRadioContentValues();
+    });
 });
 
 /**
@@ -100,6 +104,7 @@ $(function () {
 function initJs(container) {
     setTimeout(function () {
         setTinyMceReadonly();
+        setReadonlyToRadioContent();
     }, 10);
 
     container.find('.select').each(function () {
@@ -195,7 +200,7 @@ function notify(type, title, message) {
     if (typeof window.stackBottomRight === 'undefined') {
         window.stackBottomRight = {
             'dir1': 'up',
-            'dir2': 'left',
+            'dir2': 'right',
             'firstpos1': 25,
             'firstpos2': 25
         };
@@ -271,7 +276,7 @@ function ajaxRedirectOnResponse(url, overlay) {
  * @param data
  */
 function loadAjaxContent(url, contentBody, overlay, data) {
-    overlay.removeClass('d-none');
+    overlay.removeClass('d-none').show();
     setTimeout(function () {
         $.ajax({
             type: 'POST',
@@ -290,7 +295,7 @@ function loadAjaxContent(url, contentBody, overlay, data) {
                 overlay.hide();
             }
         });
-    }, 20);
+    }, 100);
 }
 
 /**
@@ -384,7 +389,7 @@ function responsive_filemanager_callback(field_id) {
             overlay.hide();
         },
         beforeSend: function () {
-            overlay.removeClass('d-none');
+            overlay.removeClass('d-none').show();
         }
     });
 }
@@ -432,4 +437,22 @@ function addCollapsedClass(selector) {
             $(this).addClass('collapsed');
         }
     });
+}
+
+/**
+ *  Set read radio content inputs
+ */
+function setReadonlyToRadioContent() {
+    var radioContentInput = $('.radio-content').closest('.form-group'),
+        checkedRadio = $('.radio-box-group input:radio:checked'),
+        inputName = checkedRadio.val(),
+        input = $('#' + inputName);
+
+    // Set readonly property for all radio content inputs
+    radioContentInput.find('.radio-content').attr('disabled', true);
+
+    // Unset readonly property from selected radio button input
+    if (input.val() !== undefined && checkedRadio.attr('disabled') !== 'disabled') {
+        input.attr('disabled', false);
+    }
 }

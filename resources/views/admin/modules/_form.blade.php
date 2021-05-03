@@ -51,8 +51,6 @@
                     @include("admin.modules.partials._$module->name")
                 @endisset
             </div>
-
-            @include('partials._html_loader', ['id' => 'module-loader'])
         </div>
     </div>
 </div>

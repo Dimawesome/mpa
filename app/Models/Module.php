@@ -20,6 +20,12 @@ class Module extends BaseModel
 {
     use HasFactory;
 
+    public array $models = [
+        'text' => Text::class,
+        'file' => File::class,
+        'card' => Card::class
+    ];
+
     /**
      * Get validation rules.
      *
@@ -70,10 +76,10 @@ class Module extends BaseModel
         $modules = $this->getPageModules($pid, $active);
 
         foreach ($modules as $module) {
-            $model = $this->getModelObj($module->name);
+            $moduleObject = $this->getModelObj($module->name);
 
-            if (method_exists($model, 'getAdditionalData')) {
-                $module->additional_data = $model->getAdditionalData($module);
+            if (method_exists($moduleObject, 'getAdditionalData')) {
+                $module->additional_data = $moduleObject->getAdditionalData($module);
             }
         }
 
@@ -133,13 +139,8 @@ class Module extends BaseModel
      */
     public function getModelObj(string $module)
     {
-        $array = [
-            'text' => Text::class,
-            'file' => File::class
-        ];
-
         return $module !== null
-            ? Container::getInstance()->make($array[$module])
+            ? Container::getInstance()->make($this->models[$module])
             : null;
     }
 

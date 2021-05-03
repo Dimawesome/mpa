@@ -18,7 +18,7 @@
                             <div class="col-md-8">
                                 <span class="title font-weight-bold text-purple">{{ trans('app.admin.module.module') . ': ' }}</span>
                                 <span class="title">{{ Lang::has("app.admin.module.$module->name") ? trans("app.admin.module.$module->name") : $module->name }}</span>
-                                <span class="font-italic">{{ $module->title ? "($module->title)" : '' }}</span>
+                                <span class="font-italic">{{ $module->module_name ? "($module->module_name)" : '' }}</span>
                                 <input type="hidden" name="modules[{{ "{$module->id}_$module->name" }}][uid]"
                                        value="{{ $module->uid }}">
                                 <input type="hidden" name="modules[{{ "{$module->id}_$module->name" }}][name]"

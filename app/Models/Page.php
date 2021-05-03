@@ -54,7 +54,7 @@ class Page extends BaseModel
     public function rules(): array
     {
         return [
-            'title' => 'required|max:30',
+            'title' => 'required|max:100',
             'page_name' => 'regex:/^\S*$/u'
         ];
     }
@@ -77,7 +77,6 @@ class Page extends BaseModel
             $item->uid = $uid;
         });
     }
-
 
     /**
      * Get all active items
@@ -148,8 +147,11 @@ class Page extends BaseModel
     /**
      * Get page view
      *
+     * @param $page
      * @param array $modules
+     * @param $menu
      * @param string $template
+     * @param bool $preview
      * @return Application|Factory|View
      */
     public function getPage($page, array $modules, $menu, string $template = 'dashboard._page', bool $preview = false)

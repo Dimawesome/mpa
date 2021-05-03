@@ -183,18 +183,13 @@ class ModuleController extends Controller
             ($moduleObject = $this->module->getModelObj($name))
             && ($moduleItem = $moduleObject->findByUid($uid))
         ) {
-
-            $additionalData = array_merge(
-                $this->module->getSelectOptions(),
-                method_exists($moduleItem, 'getAdditionalData')
-                    ? $moduleItem->getAdditionalData($moduleItem)
-                    : []
-            );
-
             return \view('admin.modules.view', [
                 'module' => $moduleItem,
                 'rules' => [],
-                'additionalData' => $additionalData,
+                'additionalData' => $this->module->getSelectOptions(),
+                'data' => method_exists($moduleItem, 'getAdditionalData')
+                    ? $moduleItem->getAdditionalData($moduleItem)
+                    : [],
                 'puid' => $puid,
                 'view' => true
             ]);
@@ -336,8 +331,13 @@ class ModuleController extends Controller
      */
     public function getModule(Request $request): View
     {
+        $moduleItem = $this->module->getModelObj($request->post('value'));
+
         return \view("admin.modules.partials._{$request->post('value')}", [
-            'module' => $this->module->getModelObj($request->post('value')),
+            'module' => $moduleItem,
+            'data' => method_exists($moduleItem, 'getAdditionalData')
+                ? $moduleItem->getAdditionalData($moduleItem)
+                : [],
             'view' => false
         ]);
     }

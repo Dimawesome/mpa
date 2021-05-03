@@ -11,7 +11,7 @@
                 @include('admin.partials._sidebar')
             </nav>
             <main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-4">
-                <div class="align-items-center pb-2 mb-3">
+                <div class="row align-items-center pl-2 pr-3 pb-2 mb-3">
 
                     <div class="col-md-12">
                         <h1 class="h2 m-0 pb-1 text-purple border-bottom">
@@ -19,7 +19,7 @@
                         </h1>
                     </div>
 
-                    <div class="content-body bg-light">
+                    <div class="col-md-12 content-body bg-light">
                         @yield('content')
                     </div>
                 </div>

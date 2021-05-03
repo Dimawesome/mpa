@@ -56,7 +56,10 @@ class AdminController extends Controller
                 return redirect('/admin');
             }
 
-            return back()->withErrors(['username' => 'nope']);
+            return back()->withErrors([
+                'username' => trans('app.login_error'),
+                'password' => trans('app.login_error')
+            ]);
         }
 
         return \view('admin.login', ['rules' => $this->user->rules()]);

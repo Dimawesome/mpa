@@ -3,7 +3,7 @@
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', 'DashboardController@index')->name('dashboard');
-Route::get('page/{slug}/{muid}/{puid}', 'Admin\PageController@page');
+Route::get('page/{slug}/{puid}/{muid?}', 'Admin\PageController@page');
 
 // Files
 Route::get('/files/file/{id}/{name?}', 'FileController@getFile')

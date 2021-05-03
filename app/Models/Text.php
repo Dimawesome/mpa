@@ -26,7 +26,7 @@ class Text extends Module
      */
     protected $fillable = [
         'name',
-        'title',
+        'module_name',
         'text',
         'order',
         'is_active'
@@ -48,6 +48,7 @@ class Text extends Module
     public function rules(): array
     {
         return [
+            'module_name' => 'max:100',
             'module' => 'required',
             'text' => 'required'
         ];

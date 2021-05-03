@@ -7,7 +7,7 @@
                         <i class="fa fa-bars"></i>
                     </h6>
                 </td>
-                <td>
+                <td class="w-45">
                 <span class="text-muted">
                     {{ trans('app.admin.title') . ': ' }}
                 </span>
@@ -40,6 +40,13 @@
                             <span class="caret ml-0"></span>
                         </button>
                         <ul class="dropdown-menu dropdown-menu-right">
+                            <li>
+                                <a href="{{ action('Admin\PageController@preview', ['puid' => $item->uid]) }}"
+                                   class="mc-modal-control" modal-size="xxl"
+                                   data-method="GET" title="{{ trans('app.preview') }}">
+                                    <em class="fa fa-eye"></em>{{ trans('app.preview') }}
+                                </a>
+                            </li>
                             @if (!$item->is_active)
                                 <li>
                                     <a class="ajax-load" data-overlay-id="table-overlay"

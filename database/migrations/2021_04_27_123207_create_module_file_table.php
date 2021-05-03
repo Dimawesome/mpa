@@ -25,7 +25,7 @@ class CreateModuleFileTable extends Migration
             $table->uuid('uid');
             $table->string('name');
             $table->bigInteger('page_id')->unsigned();
-            $table->string('title')->nullable();
+            $table->string('module_name')->nullable();
             $table->integer('order');
             $table->string('is_active');
 

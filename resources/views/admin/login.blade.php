@@ -1,6 +1,6 @@
 @extends('app')
 
-@section('body_class', 'bg-purple')
+@section('body_class', 'bg-purple admin-panel')
 
 @section('body')
     <div id="login">
@@ -16,7 +16,8 @@
                                 @include('helpers.form_control', [
                                     'type' => 'text',
                                     'name' => 'username',
-                                    'label' => trans('app.admin.username')
+                                    'label' => trans('app.admin.username'),
+                                    'value' => old('username')
                                 ])
                                 @include('helpers.form_control', [
                                     'type' => 'password',

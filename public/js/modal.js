@@ -60,7 +60,7 @@ $(function () {
         if (modalForm.valid()) {
             var modalFormData = modalForm.serializeArray();
 
-            if (tinyMCE.activeEditor !== null) {
+            if (tinyMCE.activeEditor !== null && modalForm.find('.basic-text-editor').length) {
                 modalFormData.push({name: 'text', value: tinyMCE.activeEditor.getContent({format: 'raw'})});
             }
 
@@ -98,11 +98,11 @@ $(function () {
  */
 function uploadModalData(selector, data) {
     let modulesList = $('.module-list-container'),
-        overlay = modulesList.find('.overlay');
+        overlay = $('#' + selector.data('overlay-id')),
+        modal = selector.closest('.modal');
 
+    overlay.removeClass('d-none').show();
     setTimeout(function () {
-        overlay.removeClass('d-none');
-
         $.ajax({
             type: selector.attr('data-method'),
             url: selector.attr('href'),
@@ -112,9 +112,10 @@ function uploadModalData(selector, data) {
             dataType: 'json',
             success: function (response) {
                 if (response['type'] === 'error') {
+                    showValidationErrors(response['errors'], modal);
                     notify('error', LANG_NOTIFY['error'], LANG_NOTIFY['check_try_again']);
                 } else {
-                    $('#myModal').modal('hide');
+                    modal.modal('hide');
 
                     if (response['type'] === 'success' || response['type'] === 'error') {
                         notify(response['type'], response['title'], response['message']);
@@ -125,8 +126,6 @@ function uploadModalData(selector, data) {
                     }
 
                     if (response['listReload'] !== undefined && response['listReload']) {
-
-
                         modulesList.load(modulesList.attr('data-url'), function () {
                             initJs($(this));
                         });
@@ -135,7 +134,8 @@ function uploadModalData(selector, data) {
 
                 overlay.hide();
             },
-            error: function () {
+            error: function (response) {
+                showValidationErrors(JSON.parse(response.responseText).errors, modal);
                 notify('error', LANG_NOTIFY['error'], LANG_NOTIFY['check_try_again']);
                 overlay.hide();
             }

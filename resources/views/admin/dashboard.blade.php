@@ -28,7 +28,7 @@
             <img class="img-thumbnail rounded p-0" src="{{ url('/img/web-anim.gif') }}"
                  alt="{{ trans('app.admin.admin') }}" title="{{ trans('app.admin.admin') }}">
         </div>
-{{--        <div class="col-md-12">
+        <div class="col-md-12">
             <h3 class="text-purple form-group">
                 MPA aktualumas
             </h3>
@@ -52,6 +52,6 @@
                     'disabled' => true
                 ])
             </div>
-        @endforeach--}}
+        @endforeach
     </div>
 @stop

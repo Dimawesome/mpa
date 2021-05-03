@@ -8,7 +8,7 @@ $(function () {
         selector: 'textarea.basic-text-editor',
         language: 'lt',
         statusbar: false,
-        height: 300,
+        height: 600,
         convert_urls: false,
         remove_script_host: false,
         forced_root_block: "",

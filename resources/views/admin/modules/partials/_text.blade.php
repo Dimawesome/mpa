@@ -3,10 +3,10 @@
 <div class="col-md-12">
     @include('helpers.form_control', [
         'type' => 'text',
-        'name' => 'title',
-        'id' => 'title-text',
+        'name' => 'module_name',
+        'id' => 'module-name-text',
         'label' => trans('app.admin.module.name'),
-        'value' => $module->title,
+        'value' => $module->module_name,
         'rules' => $module->rules(),
         'disabled' => $view
     ])

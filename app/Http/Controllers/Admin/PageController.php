@@ -370,20 +370,25 @@ class PageController extends Controller
      *
      * @param Request $request
      * @param string $slug
-     * @param string $muid
      * @param string $puid
+     * @param string|null $muid
      * @return Application|Factory|View|RedirectResponse
      * @throws BindingResolutionException
      */
-    public function page(Request $request, string $slug, string $muid, string $puid)
+    public function page(Request $request, string $slug, string $puid, ?string $muid = null)
     {
-        if (($pageItem = $this->page->findByUid($puid)) && $menuItem = $this->menu->findByUid($muid)) {
+        $menuItem = $this->menu->findByUid($muid);
+        $pageItem = $this->page->findByUid($puid);
+
+        if ($pageItem && $pageItem->is_active) {
             return $this->page->getPage(
                 $pageItem,
                 $this->module->sortByOrder($this->module->getModulesWithAdditionalData($pageItem->id, true)),
                 $menuItem
             );
         }
+
+        $request->session()->flash('alert-error', trans('app.notify.something_went_wrong'));
 
         return redirect()->route('dashboard');
     }

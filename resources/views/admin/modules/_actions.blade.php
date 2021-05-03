@@ -2,7 +2,7 @@
     <span class="mr-3 status-circle bg-{{ $module->is_active ? 'success' : 'error' }}"></span>
     @if (!$view)
         <a href="{{ action('Admin\ModuleController@edit', ['uid' => $module->uid, 'name' => $module->name, 'puid' => $page->uid]) }}"
-           class="btn btn-xs btn-purple mc-modal-control" modal-size="xl"
+           class="btn btn-xs btn-purple mc-modal-control" modal-size="xxl"
            title="{{ trans('app.admin.module.edit') }}"><em
                     class="fa fa-pencil"></em>{{ trans('app.admin.edit') }}
         </a>
@@ -43,7 +43,7 @@
         </div>
     @else
         <a href="{{ action('Admin\ModuleController@view', ['uid' => $module->uid, 'name' => $module->name, 'puid' => $page->uid]) }}"
-           class="btn btn-xs btn-purple mc-modal-control" modal-size="xl"
+           class="btn btn-xs btn-purple mc-modal-control" modal-size="xxl"
            title="{{ trans('app.admin.module.view') }}"><em
                     class="fa fa-eye"></em>{{ trans('app.admin.view') }}
         </a>

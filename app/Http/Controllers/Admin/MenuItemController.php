@@ -63,7 +63,7 @@ class MenuItemController extends Controller
         return \view('admin.menu_items.create', [
             'menu' => $this->menuItem->toArray(),
             'rules' => $this->menuItem->rules(),
-            'pages' => $this->menuItem->getActivePageList()
+            'pages' => $this->menuItem->getActivePageList($this->page->getAllActiveNotDeleted())
         ]);
     }
 
@@ -85,7 +85,7 @@ class MenuItemController extends Controller
 
             if ($this->menuItem->save()) {
                 $this->menuItem->url = isset($post['url'])
-                    ? $this->menuItem->createPageUrl($this->menuItem, $post['url'])
+                    ? $this->menuItem->createPageUrl($this->page->findByUid($post['url']), $this->menuItem)
                     : null;
 
                 $this->menuItem->save();
@@ -110,7 +110,7 @@ class MenuItemController extends Controller
         return \view('admin.menu_items.edit', [
             'menu' => $this->menuItem->findByUid($muid),
             'rules' => $this->menuItem->rules(),
-            'pages' => $this->menuItem->getActivePageList($muid)
+            'pages' => $this->menuItem->getActivePageList($this->page->getAllActiveNotDeleted(), $muid)
         ]);
     }
 
@@ -131,7 +131,7 @@ class MenuItemController extends Controller
             $menu->fill($post);
             $menu->is_active = $post['is_active'] ?? 0;
             $menu->url = isset($post['url'])
-                ? $this->menuItem->createPageUrl($menu, $post['url'])
+                ? $this->menuItem->createPageUrl($this->page->findByUid($post['url']), $menu)
                 : null;
 
             $menu->save()

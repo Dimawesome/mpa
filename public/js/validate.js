@@ -16,46 +16,7 @@ function customValidate(selector) {
         },
         // Different components require proper error label placement
         errorPlacement: function (error, element) {
-            var formGroup = element.parents('.form-group');
-
-            // Select2
-            if (formGroup.find('.input_help').length) {
-                error.insertAfter(formGroup.find('.input_help'));
-            }
-
-            // Unstyled checkboxes, radios
-            else if (element.parents('div').hasClass('checkbox') || element.parents('div').hasClass('radio')) {
-                error.appendTo(element.parent().parent().parent());
-            }
-
-                // Inline checkboxes, radios
-                // else if (element.parents('label').hasClass('checkbox-inline') || element.parents('label').hasClass('radio-inline')) {
-                //     error.appendTo(element.parent().parent());
-                // }
-
-            // Select2
-            else if (formGroup.find('.select2').length) {
-                error.insertAfter(formGroup.find('.select2'));
-            }
-
-            // Basic text editor
-            else if (formGroup.find('.basic-text-editor').length) {
-                error.insertAfter(formGroup.find('.tox-tinymce'));
-            }
-
-            // File input (FilePond)
-            else if (formGroup.find('.file-upload').length) {
-                error.appendTo(formGroup.find('.file-upload'));
-            }
-
-            // Input group, styled file input
-            else if (element.parent().hasClass('uploader') || element.parents().hasClass('input-group')) {
-                error.appendTo(element.parent().parent());
-            } else {
-                error.insertAfter(element);
-            }
-
-            formGroup.addClass('has-error');
+            errorPlacement(error, element);
         },
         validClass: "validation-valid-label",
         success: function (label) {
@@ -77,3 +38,65 @@ $(function () {
         customValidate($(this).closest('.form-validate-jquery'));
     });
 });
+
+/**
+ * Place input fields errors
+ *
+ * @param error
+ * @param element
+ */
+function errorPlacement(error, element) {
+    var formGroup = element.parents('.form-group');
+
+    // Select2
+    if (formGroup.find('.input_help').length) {
+        error.insertAfter(formGroup.find('.input_help'));
+    }
+
+    // Unstyled checkboxes, radios
+    else if (element.parents('div').hasClass('checkbox') || element.parents('div').hasClass('radio')) {
+        error.appendTo(element.parent().parent().parent());
+    }
+
+    // Select2
+    else if (formGroup.find('.select2').length) {
+        error.insertAfter(formGroup.find('.select2'));
+    }
+
+    // Basic text editor
+    else if (formGroup.find('.basic-text-editor').length) {
+        error.insertAfter(formGroup.find('.tox-tinymce'));
+    }
+
+    // File input (FilePond)
+    else if (formGroup.find('.file-upload').length) {
+        error.appendTo(formGroup.find('.file-upload'));
+    }
+
+    // Input group, styled file input
+    else if (element.parent().hasClass('uploader') || element.parents().hasClass('input-group')) {
+        error.appendTo(element.parent().parent());
+    } else {
+        error.insertAfter(element);
+    }
+
+    formGroup.addClass('has-error');
+}
+
+
+/**
+ * Show validation errors
+ *
+ * @param errors
+ * @param container
+ */
+function showValidationErrors(errors, container) {
+    $.each(errors, function (name, message) {
+        let element = container.find('[name=' + name + ']');
+
+        errorPlacement(
+            $('<label id="'+ element.attr('id') +'" class="validation-error-label">' + message[0] + '</label>'),
+            element
+        );
+    });
+}

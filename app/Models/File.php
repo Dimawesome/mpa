@@ -51,7 +51,7 @@ class File extends Module
     protected $fillable = [
         'name',
         'page_id',
-        'title',
+        'module_name',
         'order',
         'is_active',
         'open'
@@ -73,6 +73,7 @@ class File extends Module
     public function rules(): array
     {
         return [
+            'module_name' => 'max:100',
             'module' => 'required',
             'filename_*' => 'required',
             'width_*' => 'required',

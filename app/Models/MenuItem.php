@@ -53,7 +53,8 @@ class MenuItem extends BaseModel
     public function rules(): array
     {
         return [
-            'name' => 'required|max:20'
+            'name' => 'required|max:30',
+            'url' => 'required'
         ];
     }
 
@@ -79,48 +80,6 @@ class MenuItem extends BaseModel
     }
 
     /**
-     * Get selected page uid
-     *
-     * @param string|null $muid
-     * @return string|null
-     */
-    public function getSelectedPageUid(?string $muid): ?string
-    {
-        $menu = $this->findByUid($muid);
-
-        if ($menu !== null && $menu->url !== null) {
-            $urlSegments = explode('/', trim($menu->url, '/'));
-            return end($urlSegments);
-        }
-
-        return null;
-    }
-
-    /**
-     * Get all active page list
-     *
-     * @param string|null $muid
-     * @return array
-     */
-    public function getActivePageList(?string $muid = null): array
-    {
-        $pages = $this->page->getAllActiveNotDeleted();
-        $options = [];
-
-        foreach ($pages as $page) {
-            $options[] = [
-                'value' => $page['uid'],
-                'text' => $page['title']
-            ];
-        }
-
-        $data['values'] = $muid ? $this->getSelectedPageUid($muid) : [];
-        $data['options'] = $options;
-
-        return $data;
-    }
-
-    /**
      * Get max order number
      *
      * @return int
@@ -140,18 +99,6 @@ class MenuItem extends BaseModel
     public function getAllActiveSortedByOrder(): array
     {
         return $this->sortByOrder($this->getAllActive()) ?: [];
-    }
-
-    /**
-     * Create page url
-     *
-     * @param  $menu
-     * @param string $puid
-     * @return string
-     */
-    public function createPageUrl($menu, string $puid): string
-    {
-        return '/page/' . Str::slug($menu->name) . "/$menu->uid/$puid";
     }
 
     /**

@@ -1,4 +1,4 @@
-@inject('menu', App\Models\MenuItem)
+@inject('menu', 'App\Models\MenuItem')
 <nav class="navbar navbar-expand-lg navbar-light fixed-top" id="mainNav" aria-label="mpa-navbar">
     <div class="container">
         <a class="navbar-brand" href="{{ route('dashboard') }}">{{ trans('app.mpa') }}</a>
