@@ -66,12 +66,12 @@
                                 'value' => $item['open'] ?? '',
                                 'options' => [
                                     [
-                                        'value' => 0,
-                                        'text' => trans('app.admin.module_file.download')
-                                    ],
-                                    [
                                         'value' => 1,
                                         'text' => trans('app.admin.module_file.open')
+                                    ],
+                                    [
+                                        'value' => 0,
+                                        'text' => trans('app.admin.module_file.download')
                                     ]
                                 ],
                                 'rules' => $rules,

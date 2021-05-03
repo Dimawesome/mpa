@@ -1516,6 +1516,7 @@ body .file-item .file-text {
     font-size: 15px;
     line-height: 100%;
     padding: 20px 20px 20px 70px;
+    word-wrap: break-word;
 }
 
 body .file-item .file-icon {
