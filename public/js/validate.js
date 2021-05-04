@@ -23,6 +23,11 @@ function customValidate(selector) {
             label.parents('.form-group').removeClass('has-error');
             label.remove();
         },
+        rules: {
+            video_url: {
+                youtube: '#video_url'
+            }
+        },
         messages: {
             custom: {
                 required: "This is a custom error message",
@@ -33,6 +38,11 @@ function customValidate(selector) {
 }
 
 $(function () {
+    $.validator.addMethod('youtube', function(value, element) {
+        let p = /^(?:https?:\/\/)?(?:www\.)?youtube\.com\/watch\?(?=.*v=((\w|-){11}))(?:\S+)?$/;
+        return (value.match(p)) ? RegExp.$1 : false;
+    }, NOT_CORRECT_URL);
+
     // Initialize
     $(document).on('click', '.btn-purple', function (e) {
         customValidate($(this).closest('.form-validate-jquery'));

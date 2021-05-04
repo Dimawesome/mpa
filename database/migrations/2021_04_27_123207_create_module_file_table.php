@@ -27,7 +27,7 @@ class CreateModuleFileTable extends Migration
             $table->bigInteger('page_id')->unsigned();
             $table->string('module_name')->nullable();
             $table->integer('order');
-            $table->string('is_active');
+            $table->string('is_active')->default(0);
 
             $table->timestamps();
 

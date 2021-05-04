@@ -23,14 +23,16 @@ class CreateModuleCardTable extends Migration
             $table->string('name');
             $table->bigInteger('page_id')->unsigned();
             $table->string('module_name')->nullable();
+
             $table->string('title')->nullable();
             $table->text('url')->nullable();
-            $table->text('url_type')->nullable();
+            $table->string('url_type')->nullable();
             $table->text('text');
-            $table->text('width');
-            $table->text('align');
+            $table->string('width');
+            $table->string('align');
+
             $table->integer('order');
-            $table->string('is_active');
+            $table->string('is_active')->default(0);
 
             $table->timestamps();
 

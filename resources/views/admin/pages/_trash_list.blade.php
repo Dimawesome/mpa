@@ -7,14 +7,14 @@
                         <em class="fa fa-bars"></em>
                     </h6>
                 </td>
-                <td>
-                <span class="text-muted">
-                    {{ trans('app.admin.title') . ': ' }}
-                </span>
-                    <span class="font-weight-bold text-purple title">
-                    <a class="kq_search"
-                       href="{{ action('Admin\PageController@view', ['puid' => $item->uid]) }}">{{ $item->title }}</a>
-                </span>
+                <td class="w-45">
+                    <span class="text-muted ">
+                        {{ trans('app.admin.title') . ': ' }}
+                    </span>
+                        <span class="font-weight-bold text-purple title">
+                        <a class="kq_search"
+                           href="{{ action('Admin\PageController@view', ['puid' => $item->uid]) }}">{{ $item->title }}</a>
+                    </span>
                 </td>
                 <td class="text-center">
                     <span class="text-muted">{{ trans('app.admin.created_at') . ": $item->created_at" }}</span>

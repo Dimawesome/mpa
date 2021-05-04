@@ -6,8 +6,22 @@ $var_name = str_replace('][', '.', $var_name);
 $var_name = str_replace('[', '.', $var_name);
 $var_name = str_replace(']', '', $var_name);
 $var_name = preg_replace('/(\D*)_\d+/', '${1}_*', $var_name);
-$classes = (isset($rules) && isset($rules[$var_name])) ? ' ' . str_replace('|', ' ', $rules[$var_name]) : '';
-$required = (isset($rules) && isset($rules[$var_name]) && in_array('required', explode('|', $rules[$var_name]))) ? true : '';
+
+if (isset($rules[$var_name]) && is_array($rules[$var_name])) {
+    $classes = ' ' . $rules[$var_name][0];
+} elseif (isset($rules[$var_name])) {
+    $classes = ' ' . str_replace('|', ' ', $rules[$var_name]);
+}  else {
+    $classes = '';
+}
+
+if (isset($rules[$var_name]) && is_array($rules[$var_name])) {
+    $required = in_array('required', $rules[$var_name], true);
+} elseif (isset($rules[$var_name])) {
+    $required = in_array('required', explode('|', $rules[$var_name]), true);
+} else {
+    $required = '';
+}
 
 ?>
 

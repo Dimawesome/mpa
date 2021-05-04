@@ -14,5 +14,6 @@
         SOMETHING_WENT_WRONG = '{{ trans('app.notify.something_went_wrong') }}',
         LANG_FILE_INPUT = '{{ trans('app.no_file_selected') }}',
         LANG_FILEMANAGER_TITLE = '{{ trans('app.admin.module.file_manager_title') }}',
-        FILE_UPDATED = '{{ trans('app.admin.module_file.updated') }}';
+        FILE_UPDATED = '{{ trans('app.admin.module_file.updated') }}',
+        NOT_CORRECT_URL = '{{ trans('app.admin.module_video_card.not_correct_url') }}';
 </script>

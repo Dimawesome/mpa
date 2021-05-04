@@ -26,9 +26,11 @@ class CreateModuleTextTable extends Migration
             $table->string('name');
             $table->bigInteger('page_id')->unsigned();
             $table->string('module_name')->nullable();
+
             $table->text('text');
+
             $table->integer('order');
-            $table->string('is_active');
+            $table->string('is_active')->default(0);
 
             $table->timestamps();
 

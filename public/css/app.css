@@ -1412,7 +1412,7 @@ header.masthead .page-heading .subheading {
 }
 
 .img-thumbnail {
-    max-width: 40%;
+    max-width: 100%;
 }
 
 .preview a {

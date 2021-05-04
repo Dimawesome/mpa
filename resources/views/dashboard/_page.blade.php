@@ -2,7 +2,7 @@
 
 @section('title', $menu->name ?? trans('app.mpa'))
 
-@section('menu_name', $menu->name ?? trans('app.menu_title'))
+@section('menu_name', $menu->name ?? trans('app.mpa'))
 
 @section('page_name', $page->title ?? trans('app.page_title'))
 
@@ -13,12 +13,13 @@
                 <div class="col-md-12 module-text-content">
                     {!! $module->text !!}
                 </div>
-            @elseif ($module->name === 'card')
-                <div class="col-md-{{ $module->width }} text-{{ $module->align }} my-3">
-                    @include('partials._card', [
-                        'title' => $module->title,
+            @elseif ($module->name === 'card' || $module->name === 'video_card')
+                <div class="col-md-{{ $module->width }}{{ isset($module->align) ? " text-$module->align" : '' }} my-3">
+                    @include("partials._$module->name", [
+                        'title' => $module->title ?? '',
                         'text' => $module->text,
-                        'url' => $module->url
+                        'url' => $module->url ?? '',
+                        'videoUrl' => isset($module->additional_data['youtube_url']) ? $module->additional_data['youtube_url'][0] : ''
                     ])
                 </div>
             @elseif (isset($module->additional_data) && $module->additional_data)

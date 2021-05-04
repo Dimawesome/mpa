@@ -24,9 +24,11 @@ class CreateModuleFileHasFiles extends Migration
             $table->id();
             $table->string('name');
             $table->bigInteger('module_file_id')->unsigned();
+
             $table->text('url');
-            $table->text('width');
-            $table->text('open');
+            $table->string('width');
+            $table->string('open');
+
             $table->integer('order');
 
             $table->foreign('module_file_id')->references('id')->on('module_file')->onDelete('cascade');

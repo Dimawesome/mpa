@@ -23,7 +23,8 @@ class Module extends BaseModel
     public array $models = [
         'text' => Text::class,
         'file' => File::class,
-        'card' => Card::class
+        'card' => Card::class,
+        'video_card' => VideoCard::class
     ];
 
     /**

@@ -29,6 +29,10 @@ class ModuleSeeder extends Seeder
                 'name' => 'card',
                 'table_name' => 'module_card'
             ],
+            [
+                'name' => 'video_card',
+                'table_name' => 'module_video_card'
+            ],
         ];
 
         foreach ($modules as $module) {

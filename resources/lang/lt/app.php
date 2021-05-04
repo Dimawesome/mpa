@@ -90,6 +90,7 @@ return [
             'name' => 'Modulio pavadinimas',
             'sorted' => 'Moduliu tvarka atnaujinta',
             'card' => 'Kortelė',
+            'video_card' => 'Kortelė su vaizdo įrašų',
             'file_manager_title' => 'Failų tvarkiklė',
         ],
         'module_file' => [
@@ -113,6 +114,12 @@ return [
             'right' => 'Dešinėje',
             'page' => 'Puslapis',
             'page_list' => 'Puslapių sąrašas',
+        ],
+        'module_video_card' => [
+            'youtube_video_url' => 'YouTube nuoroda',
+            'video_autoplay' => 'Automatinis vaizdo įrašo paleidimas',
+            'not_correct_url' => 'Šis turinys negali būti įkeltas',
+            'video' => 'Vaizdo įrašas',
         ]
     ],
     'notify' => [
@@ -134,6 +141,7 @@ return [
     'mpa' => 'MPA',
     'mpa_web' => 'MPA tinklapis',
     'main' => 'Pagrindinis',
+    'dashboard_page' => 'Pagrindinis puslapis',
     'menu' => 'Menu',
     'menu_title' => 'Menu pavadinimas',
     'page_title' => 'Puslapio pavadinimas',
