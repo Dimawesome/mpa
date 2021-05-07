@@ -36,7 +36,7 @@
                        data-placement="top" data-overlay-id="module-list-overlay" data-container="body"
                        data-toggle="popover" type="button" class="btn-popover"
                     >
-                        <em class="fa fa-trash-o"></em>{{ trans('app.admin.remove') }}
+                        <em class="fa fa-trash-o"></em>{{ trans('app.admin.delete') }}
                     </a>
                 </li>
             </ul>

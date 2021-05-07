@@ -30,7 +30,7 @@ class CreateModuleTextTable extends Migration
             $table->text('text');
 
             $table->integer('order');
-            $table->string('is_active')->default(0);
+            $table->boolean('is_active')->default(0);
 
             $table->timestamps();
 

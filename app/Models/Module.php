@@ -20,6 +20,9 @@ class Module extends BaseModel
 {
     use HasFactory;
 
+    /**
+     * @var array
+     */
     public array $models = [
         'text' => Text::class,
         'file' => File::class,

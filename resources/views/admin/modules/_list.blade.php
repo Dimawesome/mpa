@@ -10,7 +10,7 @@
                     data-id="{{ $module->id }}"
                     data-uid="{{ $module->uid }}"
                     data-name="{{ $module->name }}">
-                    <div class="dd-handle dd3-handle">
+                    <div class="{{ $view ? 'dd-nodrag' : 'dd-handle dd3-handle' }}">
                         <em class="fa fa-ellipsis-v"></em>
                     </div>
                     <div class="dd3-content">

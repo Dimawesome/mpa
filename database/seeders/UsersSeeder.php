@@ -18,7 +18,7 @@ class UsersSeeder extends Seeder
         $items = [
             [
                 'username' => 'admin',
-                'password' => Hash::make('admin')
+                'password' => Hash::make('adminpass1')
             ]
         ];
 

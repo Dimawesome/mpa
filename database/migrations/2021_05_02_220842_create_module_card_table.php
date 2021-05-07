@@ -32,7 +32,7 @@ class CreateModuleCardTable extends Migration
             $table->string('align');
 
             $table->integer('order');
-            $table->string('is_active')->default(0);
+            $table->boolean('is_active')->default(0);
 
             $table->timestamps();
 

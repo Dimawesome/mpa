@@ -1,7 +1,7 @@
 @if($data)
     @foreach($data as $key => $item)
         <li class="dd-item" data-type="module">
-            <div class="dd-handle dd3-handle"><em class="fa fa-ellipsis-v"></em></div>
+            <div class="{{ isset($view) && $view ? 'dd-nodrag' : 'dd-handle dd3-handle' }}"><em class="fa fa-ellipsis-v"></em></div>
             <div class="dd3-content">
                 <div class="row">
                     <div class="col-md-9">

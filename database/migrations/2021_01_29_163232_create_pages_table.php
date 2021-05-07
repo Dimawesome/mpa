@@ -24,8 +24,8 @@ class CreatePagesTable extends Migration
             $table->id();
             $table->uuid('uid');
             $table->string('title')->nullable();
-            $table->string('is_active')->default(0);
-            $table->string('is_deleted')->default(0);
+            $table->boolean('is_active')->default(0);
+            $table->boolean('is_deleted')->default(0);
 
             $table->timestamps();
         });

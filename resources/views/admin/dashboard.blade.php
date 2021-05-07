@@ -8,6 +8,14 @@
     <div class="admin-dashboard">
         <div class="col-md-12">
             <h3 class="text-purple form-group">
+                BD tema
+            </h3>
+        </div>
+        <div class="col-md-12 text-purple form-group">
+            Turinio valdymo sistemų modulinio funkcionalumo integravimas į internetinių svetainių projektus
+        </div>
+        <div class="col-md-12">
+            <h3 class="text-purple form-group">
                 Realizavimas
             </h3>
         </div>

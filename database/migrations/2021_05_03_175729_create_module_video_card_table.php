@@ -34,7 +34,7 @@ class CreateModuleVideoCardTable extends Migration
             $table->string('width');
 
             $table->integer('order');
-            $table->string('is_active')->default(0);
+            $table->boolean('is_active')->default(0);
 
             $table->timestamps();
 
