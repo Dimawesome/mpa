@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Container\Container;
 use Illuminate\Contracts\Container\BindingResolutionException;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -55,7 +56,7 @@ class Module extends BaseModel
         $modules = $this->getAll();
 
         foreach ($modules as $module) {
-            $pageModules[] = DB::table($module->table_name)
+            $pageModules[] = DB::table("module_$module->name")
                 ->where('page_id', '=', $pid)
                 ->where(function ($query) use ($active) {
                     if ($active) {
@@ -169,21 +170,6 @@ class Module extends BaseModel
     }
 
     /**
-     * Get allowed role list
-     *
-     * @param $module
-     * @return array|Application|Translator|string|null
-     */
-    public static function getAllowedRoleList($module)
-    {
-        $roles = DB::table("module_{$module->name}")->select('visible_to')
-            ->where('uid', '=', $module->uid)
-            ->get()->first();
-
-        return Role::getRoleList($roles);
-    }
-
-    /**
      * Save or update records
      *
      * @param $model
@@ -200,9 +186,10 @@ class Module extends BaseModel
         $model->fill($post);
 
         if ($pid && $this->saveModulesOrder($request->post('main'))) {
-            $model->name = $post['module'];
+            $model->modules_id = $this->getIdByName($post['module']);
             $model->page_id = $pid;
             $model->is_active = $post['is_active'] ?? 0;
+            $model->name = $post['module'];
             $model->order = $order ?? $model->order;
 
             if ($model->save()) {
@@ -235,5 +222,16 @@ class Module extends BaseModel
         }
 
         return null;
+    }
+
+    /**
+     * Get id by name
+     *
+     * @param string $name
+     * @return Module[]|Collection
+     */
+    public function getIdByName(string $name)
+    {
+        return $this->select('id')->where('name', '=', $name)->first()->id;
     }
 }

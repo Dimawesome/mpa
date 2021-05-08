@@ -16,10 +16,6 @@ class CreatePagesTable extends Migration
      */
     public function up(): void
     {
-//        Schema::disableForeignKeyConstraints();
-//        Schema::dropIfExists('pages');
-//        Schema::enableForeignKeyConstraints();
-        
         Schema::create('pages', function (Blueprint $table) {
             $table->id();
             $table->uuid('uid');

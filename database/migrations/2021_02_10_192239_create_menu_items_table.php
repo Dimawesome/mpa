@@ -16,10 +16,6 @@ class CreateMenuItemsTable extends Migration
      */
     public function up(): void
     {
-        Schema::disableForeignKeyConstraints();
-        Schema::dropIfExists('menu_items');
-        Schema::enableForeignKeyConstraints();
-
         Schema::create('menu_items', function (Blueprint $table) {
             $table->id();
             $table->uuid('uid');

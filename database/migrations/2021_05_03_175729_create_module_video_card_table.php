@@ -16,18 +16,14 @@ class CreateModuleVideoCardTable extends Migration
      */
     public function up(): void
     {
-        Schema::disableForeignKeyConstraints();
-        Schema::dropIfExists('module_video_card');
-        Schema::enableForeignKeyConstraints();
-
-
         Schema::create('module_video_card', function (Blueprint $table) {
             $table->id();
             $table->uuid('uid');
-            $table->string('name');
+            $table->bigInteger('modules_id')->unsigned();
             $table->bigInteger('page_id')->unsigned();
             $table->string('module_name')->nullable();
 
+            $table->string('name');
             $table->text('video_url');
             $table->string('video_autoplay')->default(0);
             $table->text('text');
@@ -38,6 +34,7 @@ class CreateModuleVideoCardTable extends Migration
 
             $table->timestamps();
 
+            $table->foreign('modules_id')->references('id')->on('modules')->onDelete('cascade');
             $table->foreign('page_id')->references('id')->on('pages')->onDelete('cascade');
         });
     }

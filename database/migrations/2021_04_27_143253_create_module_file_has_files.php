@@ -16,10 +16,6 @@ class CreateModuleFileHasFiles extends Migration
      */
     public function up(): void
     {
-        Schema::disableForeignKeyConstraints();
-        Schema::dropIfExists('module_file_has_files');
-        Schema::enableForeignKeyConstraints();
-
         Schema::create('module_file_has_files', function (Blueprint $table) {
             $table->id();
             $table->string('name');

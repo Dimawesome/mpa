@@ -19,19 +19,15 @@ class ModuleSeeder extends Seeder
         $modules = [
             [
                 'name' => 'text',
-                'table_name' => 'module_text'
             ],
             [
                 'name' => 'file',
-                'table_name' => 'module_file'
             ],
             [
                 'name' => 'card',
-                'table_name' => 'module_card'
             ],
             [
                 'name' => 'video_card',
-                'table_name' => 'module_video_card'
             ],
         ];
 

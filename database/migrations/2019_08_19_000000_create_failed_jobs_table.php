@@ -13,10 +13,6 @@ class CreateFailedJobsTable extends Migration
      */
     public function up(): void
     {
-        Schema::disableForeignKeyConstraints();
-        Schema::dropIfExists('failed_jobs');
-        Schema::enableForeignKeyConstraints();
-
         Schema::create('failed_jobs', function (Blueprint $table) {
             $table->id();
             $table->string('uuid')->unique();

@@ -13,17 +13,14 @@ class CreateModuleCardTable extends Migration
      */
     public function up(): void
     {
-        Schema::disableForeignKeyConstraints();
-        Schema::dropIfExists('module_card');
-        Schema::enableForeignKeyConstraints();
-
         Schema::create('module_card', function (Blueprint $table) {
             $table->id();
             $table->uuid('uid');
-            $table->string('name');
+            $table->bigInteger('modules_id')->unsigned();
             $table->bigInteger('page_id')->unsigned();
             $table->string('module_name')->nullable();
 
+            $table->string('name');
             $table->string('title')->nullable();
             $table->text('url')->nullable();
             $table->string('url_type')->nullable();
@@ -36,6 +33,7 @@ class CreateModuleCardTable extends Migration
 
             $table->timestamps();
 
+            $table->foreign('modules_id')->references('id')->on('modules')->onDelete('cascade');
             $table->foreign('page_id')->references('id')->on('pages')->onDelete('cascade');
         });
     }
