@@ -24,12 +24,12 @@ class ModuleController extends Controller
     /**
      * @var Module
      */
-    public Module $module;
+    private Module $module;
 
     /**
      * @var Page
      */
-    public Page $page;
+    private Page $page;
 
     /**
      * ModuleController constructor
@@ -132,11 +132,11 @@ class ModuleController extends Controller
      * Update the specified resource in storage
      *
      * @param Request $request
-     * @param $puid
+     * @param string $puid
      * @return JsonResponse|null
      * @throws BindingResolutionException
      */
-    public function update(Request $request, $puid): ?JsonResponse
+    public function update(Request $request, string $puid): ?JsonResponse
     {
         $moduleData = collect($request->post('modal'))->pluck('value', 'name')->all();
         $errors = $this->module->validateModal($moduleData);
@@ -165,67 +165,6 @@ class ModuleController extends Controller
         }
 
         return $errors;
-    }
-
-    /**
-     * Show the form for editing the specified resource
-     *
-     * @param Request $request
-     * @param string $uid
-     * @param string $name
-     * @param string $puid
-     * @return Application|Factory|View|RedirectResponse
-     * @throws BindingResolutionException
-     */
-    public function view(Request $request, string $uid, string $name, string $puid)
-    {
-        if (
-            ($moduleObject = $this->module->getModelObj($name))
-            && ($moduleItem = $moduleObject->findByUid($uid))
-        ) {
-            return \view('admin.modules.view', [
-                'module' => $moduleItem,
-                'rules' => [],
-                'additionalData' => $this->module->getSelectOptions(),
-                'data' => method_exists($moduleItem, 'getAdditionalData')
-                    ? $moduleItem->getAdditionalData($moduleItem)
-                    : [],
-                'puid' => $puid,
-                'view' => true
-            ]);
-        }
-
-        $request->session()->flash('alert-error', trans('app.notify.something_went_wrong'));
-
-        return redirect()->back();
-    }
-
-    /**
-     * Sort items
-     *
-     * @param Request $request
-     * @return JsonResponse
-     * @throws BindingResolutionException
-     */
-    public function sort(Request $request): JsonResponse
-    {
-        $node = $request->post('node');
-
-        if (isset($node) && !empty($node)) {
-            $this->module->saveModulesOrder($node);
-
-            return response()->json([
-                'type' => 'success',
-                'title' => trans('app.notify.success'),
-                'message' => trans('app.admin.module.sorted')
-            ]);
-        }
-
-        return response()->json([
-            'type' => 'error',
-            'title' => trans('error.notify.success'),
-            'message' => trans('app.notify.something_went_wrong')
-        ]);
     }
 
     /**
@@ -323,6 +262,39 @@ class ModuleController extends Controller
     }
 
     /**
+     * Show the form for editing the specified resource
+     *
+     * @param Request $request
+     * @param string $uid
+     * @param string $name
+     * @param string $puid
+     * @return Application|Factory|View|RedirectResponse
+     * @throws BindingResolutionException
+     */
+    public function view(Request $request, string $uid, string $name, string $puid)
+    {
+        if (
+            ($moduleObject = $this->module->getModelObj($name))
+            && ($moduleItem = $moduleObject->findByUid($uid))
+        ) {
+            return \view('admin.modules.view', [
+                'module' => $moduleItem,
+                'rules' => [],
+                'additionalData' => $this->module->getSelectOptions(),
+                'data' => method_exists($moduleItem, 'getAdditionalData')
+                    ? $moduleItem->getAdditionalData($moduleItem)
+                    : [],
+                'puid' => $puid,
+                'view' => true
+            ]);
+        }
+
+        $request->session()->flash('alert-error', trans('app.notify.something_went_wrong'));
+
+        return redirect()->back();
+    }
+
+    /**
      * Get specified resource by uid
      *
      * @param Request $request
@@ -378,5 +350,33 @@ class ModuleController extends Controller
                 'rules' => $moduleObj->rules()
             ]);
         }
+    }
+
+    /**
+     * Sort items
+     *
+     * @param Request $request
+     * @return JsonResponse
+     * @throws BindingResolutionException
+     */
+    public function sort(Request $request): JsonResponse
+    {
+        $node = $request->post('node');
+
+        if (isset($node) && !empty($node)) {
+            $this->module->saveModulesOrder($node);
+
+            return response()->json([
+                'type' => 'success',
+                'title' => trans('app.notify.success'),
+                'message' => trans('app.admin.module.sorted')
+            ]);
+        }
+
+        return response()->json([
+            'type' => 'error',
+            'title' => trans('error.notify.success'),
+            'message' => trans('app.notify.something_went_wrong')
+        ]);
     }
 }

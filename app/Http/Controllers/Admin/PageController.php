@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Models\MenuItem;
 use App\Models\Module;
 use App\Models\Page;
 use App\Http\Controllers\Controller;
@@ -34,25 +33,20 @@ class PageController extends Controller
     private Module $module;
 
     /**
-     * @var MenuItem
-     */
-    private MenuItem $menu;
-
-    /**
      * PageController constructor.
      *
      * @param Page $page
      * @param Module $module
-     * @param MenuItem $menu
      */
-    public function __construct(Page $page, Module $module, MenuItem $menu)
+    public function __construct(Page $page, Module $module)
     {
         $this->page = $page;
         $this->module = $module;
-        $this->menu = $menu;
     }
 
     /**
+     * Show page index
+     *
      * @param Request $request
      * @return View
      */
@@ -73,48 +67,6 @@ class PageController extends Controller
     {
         return \view('admin.pages._list', [
             'items' => $this->page->search($request)->paginate($request->per_page)
-        ]);
-    }
-
-    /**
-     * Disable page
-     *
-     * @param Request $request
-     * @param string $puid
-     * @return JsonResponse
-     */
-    public function disable(Request $request, string $puid): JsonResponse
-    {
-        if ($pageItem = $this->page->findByUid($puid)) {
-            $pageItem->disable();
-            $request->session()->flash('alert-success', trans('app.admin.page.disabled'));
-        } else {
-            $request->session()->flash('alert-error', trans('app.notify.something_went_wrong'));
-        }
-
-        return response()->json([
-            'url' => route('admin.page')
-        ]);
-    }
-
-    /**
-     * Enable page
-     *
-     * @param Request $request
-     * @param string $puid
-     * @return JsonResponse
-     */
-    public function enable(Request $request, string $puid): JsonResponse
-    {
-        if ($pageItem = $this->page->findByUid($puid)) {
-            $pageItem->enable();
-            $request->session()->flash('alert-success', trans('app.admin.page.enabled'));
-        } else {
-            $request->session()->flash('alert-error', trans('app.notify.something_went_wrong'));
-        }
-
-        return response()->json([
-            'url' => route('admin.page')
         ]);
     }
 
@@ -192,7 +144,7 @@ class PageController extends Controller
                 $pageItem->fill($request->old());
             }
 
-            return view('admin.pages.edit', [
+            return \view('admin.pages.edit', [
                 'page' => $pageItem,
                 'view' => false,
                 'modules' => $this->module->sortByOrder($this->module->getPageModules($pageItem->id))
@@ -232,30 +184,6 @@ class PageController extends Controller
     }
 
     /**
-     * Show the form for editing the specified resource.
-     *
-     * @param Request $request
-     * @param string $puid
-     * @return Application|Factory|View|RedirectResponse
-     */
-    public function view(Request $request, string $puid)
-    {
-        $pageItem = $this->page->findByUid($puid);
-
-        if ($pageItem && $pageItem->is_deleted) {
-            return \view('admin.pages.view', [
-                'page' => $pageItem,
-                'view' => true,
-                'modules' => $this->module->sortByOrder($this->module->getPageModules($pageItem->id))
-            ]);
-        }
-
-        $request->session()->flash('alert-error', trans('app.notify.something_went_wrong'));
-
-        return redirect()->route('admin.page');
-    }
-
-    /**
      * Remove the specified resource
      *
      * @param Request $request
@@ -280,6 +208,74 @@ class PageController extends Controller
     }
 
     /**
+     * Disable page
+     *
+     * @param Request $request
+     * @param string $puid
+     * @return JsonResponse
+     */
+    public function disable(Request $request, string $puid): JsonResponse
+    {
+        if ($pageItem = $this->page->findByUid($puid)) {
+            $pageItem->disable();
+            $request->session()->flash('alert-success', trans('app.admin.page.disabled'));
+        } else {
+            $request->session()->flash('alert-error', trans('app.notify.something_went_wrong'));
+        }
+
+        return response()->json([
+            'url' => route('admin.page')
+        ]);
+    }
+
+    /**
+     * Enable page
+     *
+     * @param Request $request
+     * @param string $puid
+     * @return JsonResponse
+     */
+    public function enable(Request $request, string $puid): JsonResponse
+    {
+        if ($pageItem = $this->page->findByUid($puid)) {
+            $pageItem->enable();
+            $request->session()->flash('alert-success', trans('app.admin.page.enabled'));
+        } else {
+            $request->session()->flash('alert-error', trans('app.notify.something_went_wrong'));
+        }
+
+        return response()->json([
+            'url' => route('admin.page')
+        ]);
+    }
+
+    /**
+     * Show trash list main page
+     *
+     * @param Request $request
+     * @return View
+     */
+    public function trash(Request $request): View
+    {
+        return \view('admin.pages.trash', [
+            'items' => $this->page->search($request, true)
+        ]);
+    }
+
+    /**
+     * Display a listing of the resource.
+     *
+     * @param Request $request
+     * @return View
+     */
+    public function trashListing(Request $request): View
+    {
+        return \view('admin.pages._trash_list', [
+            'items' => $this->page->search($request, true)->paginate($request->per_page)
+        ]);
+    }
+
+    /**
      * Delete the specified resource
      *
      * @param Request $request
@@ -295,6 +291,23 @@ class PageController extends Controller
         } else {
             $request->session()->flash('alert-error', trans('app.notify.something_went_wrong'));
         }
+
+        return response()->json([
+            'url' => route('admin.page.trash')
+        ]);
+    }
+
+    /**
+     * Delete all the specified resources
+     *
+     * @param Request $request
+     * @return JsonResponse
+     * @throws Exception
+     */
+    public function deleteAll(Request $request): JsonResponse
+    {
+        $this->page->deleteAll();
+        $request->session()->flash('alert-success', trans('app.admin.trash_cleaned'));
 
         return response()->json([
             'url' => route('admin.page.trash')
@@ -325,79 +338,34 @@ class PageController extends Controller
     }
 
     /**
-     * Delete all the specified resources
+     * Show view form
      *
      * @param Request $request
-     * @return JsonResponse
-     * @throws Exception
-     */
-    public function deleteAll(Request $request): JsonResponse
-    {
-        $this->page->deleteAll();
-        $request->session()->flash('alert-success', trans('app.admin.trash_cleaned'));
-
-        return response()->json([
-            'url' => route('admin.page.trash')
-        ]);
-    }
-
-    /**
-     * @param Request $request
-     * @return View
-     */
-    public function trash(Request $request): View
-    {
-        return \view('admin.pages.trash', [
-            'items' => $this->page->search($request, true)
-        ]);
-    }
-
-    /**
-     * Display a listing of the resource.
-     *
-     * @param Request $request
-     * @return View
-     */
-    public function trashListing(Request $request): View
-    {
-        return \view('admin.pages._trash_list', [
-            'items' => $this->page->search($request, true)->paginate($request->per_page)
-        ]);
-    }
-
-    /**
-     * Show page with content and files
-     *
-     * @param Request $request
-     * @param string $slug
      * @param string $puid
-     * @param string|null $muid
      * @return Application|Factory|View|RedirectResponse
-     * @throws BindingResolutionException
      */
-    public function page(Request $request, string $slug, string $puid, ?string $muid = null)
+    public function view(Request $request, string $puid)
     {
-        $menuItem = $this->menu->findByUid($muid);
         $pageItem = $this->page->findByUid($puid);
 
-        if ($pageItem && $pageItem->is_active) {
-            return $this->page->getPage(
-                $pageItem,
-                $this->module->sortByOrder($this->module->getModulesWithAdditionalData($pageItem->id, true)),
-                $menuItem
-            );
+        if ($pageItem && $pageItem->is_deleted) {
+            return \view('admin.pages.view', [
+                'page' => $pageItem,
+                'view' => true,
+                'modules' => $this->module->sortByOrder($this->module->getPageModules($pageItem->id))
+            ]);
         }
 
         $request->session()->flash('alert-error', trans('app.notify.something_went_wrong'));
 
-        return redirect()->route('dashboard');
+        return redirect()->route('admin.page');
     }
 
     /**
      * Return page for preview
      *
      * @param string $puid
-     * @return Application|Factory|View|string
+     * @return View|string
      * @throws BindingResolutionException
      */
     public function preview(string $puid)

@@ -56,9 +56,9 @@ class MenuItemController extends Controller
     /**
      * Show the form for creating a new resource.
      *
-     * @return Application|Factory|View
+     * @return View
      */
-    public function create()
+    public function create(): View
     {
         return \view('admin.menu_items.create', [
             'menu' => $this->menuItem->toArray(),
@@ -103,9 +103,9 @@ class MenuItemController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @return Application|Factory|View
+     * @return View
      */
-    public function edit(string $muid)
+    public function edit(string $muid): View
     {
         return \view('admin.menu_items.edit', [
             'menu' => $this->menuItem->findByUid($muid),

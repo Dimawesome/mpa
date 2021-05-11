@@ -4,7 +4,6 @@ namespace App\Models;
 
 use Illuminate\Container\Container;
 use Illuminate\Contracts\Container\BindingResolutionException;
-use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -138,14 +137,14 @@ class Module extends BaseModel
     /**
      * Get model's object
      *
-     * @param string $module
-     * @return File|Text|null
+     * @param string $type
+     * @return mixed|object|null
      * @throws BindingResolutionException
      */
-    public function getModelObj(string $module)
+    public function getModelObj(string $type)
     {
-        return $module !== null
-            ? Container::getInstance()->make($this->models[$module])
+        return $type !== null
+            ? Container::getInstance()->make($this->models[$type])
             : null;
     }
 
@@ -228,7 +227,7 @@ class Module extends BaseModel
      * Get id by name
      *
      * @param string $name
-     * @return Module[]|Collection
+     * @return mixed
      */
     public function getIdByName(string $name)
     {

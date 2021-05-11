@@ -19,7 +19,9 @@
                         'title' => $module->title ?? '',
                         'text' => $module->text,
                         'url' => $module->url ?? '',
-                        'videoUrl' => isset($module->additional_data['youtube_url']) ? $module->additional_data['youtube_url'][0] : ''
+                        'videoUrl' => isset($module->additional_data['youtube_url'])
+                            ? $module->additional_data['youtube_url'][0]
+                            : ''
                     ])
                 </div>
             @elseif (isset($module->additional_data) && $module->additional_data)

@@ -3,7 +3,7 @@
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', 'DashboardController@index')->name('dashboard');
-Route::get('page/{slug}/{puid}/{muid?}', 'Admin\PageController@page');
+Route::get('page/{slug}/{puid}/{muid?}', 'DashboardController@page');
 
 // Files
 Route::get('/files/file/{id}/{name?}', 'FileController@getFile')
@@ -50,13 +50,12 @@ Route::group(['namespace' => 'Admin'], function () {
             Route::get('/pages/preview/{puid}', 'PageController@preview');
 
             // Modules
-            Route::get('/modules', 'ModuleController@index');
             Route::get('/modules/create/{puid}', 'ModuleController@create');
             Route::post('/modules/store/{puid}', 'ModuleController@store');
             Route::get('/modules/edit/{uid}/{name}/{puid}', 'ModuleController@edit');
             Route::patch('/modules/update/{puid}', 'ModuleController@update');
-            Route::get('/modules/disable/{uid}/{name}', 'ModuleController@disable');
             Route::get('/modules/enable/{uid}/{name}', 'ModuleController@enable');
+            Route::get('/modules/disable/{uid}/{name}', 'ModuleController@disable');
             Route::get('/modules/delete/{uid}/{name}', 'ModuleController@delete');
             Route::get('/modules/view/{uid}/{name}/{puid}', 'ModuleController@view');
             Route::post('/modules/module', 'ModuleController@getModule');

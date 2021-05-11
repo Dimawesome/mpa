@@ -3,6 +3,7 @@
 namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 
 /**
@@ -41,6 +42,7 @@ class DeleteEmptyPages extends Command
         DB::table($this->table)
             ->whereColumn('created_at', 'updated_at')
             ->where('title', '=', null)
+            ->where('created_at', '>', Carbon::now()->addHours(3))
             ->delete();
 
         $this->info('Empty page and modal records deleted.');

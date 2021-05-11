@@ -3,7 +3,6 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
 
 /**
  * Class Text
@@ -63,9 +62,9 @@ class Text extends Module
         // Create uid when creating item.
         static::creating(function ($item) {
             // Create new uid
-            $uid = uniqid();
-            while (self::where('uid', '=', $uid)->count() > 0) {
-                $uid = uniqid();
+            $uid = uniqid('', false);
+            while ((new Text)->where('uid', '=', $uid)->count() > 0) {
+                $uid = uniqid('', false);
             }
             $item->uid = $uid;
         });

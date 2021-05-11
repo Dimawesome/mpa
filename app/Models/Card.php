@@ -27,18 +27,6 @@ class Card extends Module
     protected Page $page;
 
     /**
-     * Card constructor.
-     *
-     * @param array $attributes
-     */
-    public function __construct(array $attributes = [])
-    {
-        $this->page = new Page();
-
-        parent::__construct($attributes);
-    }
-
-    /**
      * The attributes that are mass assignable.
      *
      * @var array
@@ -66,6 +54,18 @@ class Card extends Module
     ];
 
     /**
+     * Card constructor.
+     *
+     * @param array $attributes
+     */
+    public function __construct(array $attributes = [])
+    {
+        $this->page = new Page();
+
+        parent::__construct($attributes);
+    }
+
+    /**
      * Get validation rules.
      *
      * @return array
@@ -91,9 +91,9 @@ class Card extends Module
         // Create uid when creating item.
         static::creating(function ($item) {
             // Create new uid
-            $uid = uniqid();
-            while (self::where('uid', '=', $uid)->count() > 0) {
-                $uid = uniqid();
+            $uid = uniqid('', false);
+            while ((new Card)->where('uid', '=', $uid)->count() > 0) {
+                $uid = uniqid('', false);
             }
             $item->uid = $uid;
         });

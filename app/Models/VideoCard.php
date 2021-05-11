@@ -19,18 +19,6 @@ class VideoCard extends Module
     protected Page $page;
 
     /**
-     * Card constructor.
-     *
-     * @param array $attributes
-     */
-    public function __construct(array $attributes = [])
-    {
-        $this->page = new Page();
-
-        parent::__construct($attributes);
-    }
-
-    /**
      * The attributes that are mass assignable.
      *
      * @var array
@@ -54,6 +42,18 @@ class VideoCard extends Module
         'created_at',
         'updated_at'
     ];
+
+    /**
+     * Card constructor.
+     *
+     * @param array $attributes
+     */
+    public function __construct(array $attributes = [])
+    {
+        $this->page = new Page();
+
+        parent::__construct($attributes);
+    }
 
     /**
      * Get validation rules.
@@ -83,9 +83,9 @@ class VideoCard extends Module
         // Create uid when creating item.
         static::creating(function ($item) {
             // Create new uid
-            $uid = uniqid();
-            while (self::where('uid', '=', $uid)->count() > 0) {
-                $uid = uniqid();
+            $uid = uniqid('', false);
+            while ((new VideoCard)->where('uid', '=', $uid)->count() > 0) {
+                $uid = uniqid('', false);
             }
             $item->uid = $uid;
         });
@@ -120,11 +120,11 @@ class VideoCard extends Module
     /**
      * Get youtube url
      *
-     * @param $url
-     * @param $autoplay
+     * @param string|null $url
+     * @param string|null $autoplay
      * @return string
      */
-    public function getYouTubeUrl($url, $autoplay): string
+    public function getYouTubeUrl(?string $url, ?string $autoplay): string
     {
         preg_match(
             '/(https:|http:|):(\/\/www\.|\/\/|)(.*?)\/(embed\/|watch.*?v=|)([a-z_A-Z0-9\-]{11})/i',

@@ -70,9 +70,9 @@ class Page extends BaseModel
         // Create uid when creating item.
         static::creating(function ($item) {
             // Create new uid
-            $uid = uniqid();
-            while (Page::where('uid', '=', $uid)->count() > 0) {
-                $uid = uniqid();
+            $uid = uniqid('', false);
+            while ((new Page)->where('uid', '=', $uid)->count() > 0) {
+                $uid = uniqid('', false);
             }
             $item->uid = $uid;
         });
@@ -152,9 +152,9 @@ class Page extends BaseModel
      * @param $menu
      * @param string $template
      * @param bool $preview
-     * @return Application|Factory|View
+     * @return View
      */
-    public function getPage($page, array $modules, $menu, string $template = 'dashboard._page', bool $preview = false)
+    public function getPage($page, array $modules, $menu, string $template = 'dashboard._page', bool $preview = false): View
     {
         return \view($template, [
             'page' => $page,

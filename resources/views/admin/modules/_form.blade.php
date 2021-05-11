@@ -43,7 +43,7 @@
                     'readonly' => isset($module->name),
                     'include_blank' => true,
                     'overlayId' => 'module-loader',
-                    'disabled' => $view
+                    'disabled' => $view || $module->name
                 ])
             </div>
             <div class="col-md-12 select2-content-body p-0">

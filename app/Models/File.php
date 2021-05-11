@@ -3,7 +3,6 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Query\Builder;
 use Illuminate\Support\Facades\DB;
 
@@ -32,18 +31,6 @@ class File extends Module
     protected Builder $filesTable;
 
     /**
-     * File constructor
-     *
-     * @param array $attributes
-     */
-    public function __construct(array $attributes = [])
-    {
-        $this->filesTable = DB::table($this->filesTableName);
-
-        parent::__construct($attributes);
-    }
-
-    /**
      * The attributes that are mass assignable.
      *
      * @var array
@@ -64,6 +51,18 @@ class File extends Module
         'created_at',
         'updated_at'
     ];
+
+    /**
+     * File constructor
+     *
+     * @param array $attributes
+     */
+    public function __construct(array $attributes = [])
+    {
+        $this->filesTable = DB::table($this->filesTableName);
+
+        parent::__construct($attributes);
+    }
 
     /**
      * Get validation rules.
@@ -91,9 +90,9 @@ class File extends Module
         // Create uid when creating item.
         static::creating(function ($item) {
             // Create new uid
-            $uid = uniqid();
-            while (self::where('uid', '=', $uid)->count() > 0) {
-                $uid = uniqid();
+            $uid = uniqid('', false);
+            while ((new File)->where('uid', '=', $uid)->count() > 0) {
+                $uid = uniqid('', false);
             }
             $item->uid = $uid;
         });
