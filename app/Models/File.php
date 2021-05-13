@@ -26,11 +26,6 @@ class File extends Module
     protected string $filesTableName = 'module_file_has_files';
 
     /**
-     * @var Builder
-     */
-    protected Builder $filesTable;
-
-    /**
      * The attributes that are mass assignable.
      *
      * @var array
@@ -51,18 +46,6 @@ class File extends Module
         'created_at',
         'updated_at'
     ];
-
-    /**
-     * File constructor
-     *
-     * @param array $attributes
-     */
-    public function __construct(array $attributes = [])
-    {
-        $this->filesTable = DB::table($this->filesTableName);
-
-        parent::__construct($attributes);
-    }
 
     /**
      * Get validation rules.

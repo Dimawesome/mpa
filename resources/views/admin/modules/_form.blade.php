@@ -28,7 +28,7 @@
             ])
         </div>
         <div class="col-md-12 p-0 select2-content-container">
-            <div class="col-md-12 {{ isset($module->name) ? ' display-none' : '' }}">
+            <div class="col-md-12 {{ isset($module->name) ? ' d-none' : '' }}">
                 @include('helpers.form_control', [
                     'type' => 'select',
                     'name' => 'module',
@@ -43,7 +43,7 @@
                     'readonly' => isset($module->name),
                     'include_blank' => true,
                     'overlayId' => 'module-loader',
-                    'disabled' => $view || $module->name
+                    'disabled' => $view
                 ])
             </div>
             <div class="col-md-12 select2-content-body p-0">
