@@ -4,7 +4,7 @@
         LANG_NOTIFY = {
             'success': '{{ trans('app.notify.success') }}',
             'error': '{{ trans('app.notify.error') }}',
-            'notice': '{{ trans('app.notify.notice') }}',
+            {{--'notice': '{{ trans('app.notify.notice') }}',--}}
             'check_try_again': '{{ trans('app.notify.check_entry_try_again') }}'
         },
         POPOVER = {

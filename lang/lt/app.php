@@ -1,6 +1,7 @@
 <?php
 
 return [
+    'no_file_selected' => 'Failas nepasirenktas',
     'admin' => [
         'close' => 'Uždaryti',
         'admin' => 'Administravimas',
@@ -92,6 +93,7 @@ return [
             'card' => 'Kortelė',
             'video_card' => 'Kortelė su vaizdo įrašų',
             'file_manager_title' => 'Failų tvarkiklė',
+            'edit' => 'Redaguoti'
         ],
         'module_file' => [
             'add' => 'Pridėti failą (-us)',
@@ -148,4 +150,5 @@ return [
     'more' => 'Plačiau',
     'preview' => 'Peržiūrėti',
     'login_error' => 'Neteisingi prisijungimo duomenys',
+    'change_sort_direction' => 'Pakeisti rušiavimo kryptį'
 ];
